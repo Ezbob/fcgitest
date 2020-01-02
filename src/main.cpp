@@ -44,6 +44,9 @@ int main (void)
         sout << "<H4>Process/Initial Environment</H4>\n";
         penv(environ, sout);
 
+        sout << "<H4>Fcgi Environment</H4>\n";
+        penv(request->envp(), sout);
+
         auto val = sout.str();
 
         FCGX_PutStr(val.c_str(), val.size(), request->out());
