@@ -7,7 +7,7 @@ This project includes a copy of the old and venerable reference FCGI library. Th
 The version of the fastcgi used in this library is version 2.4.0 . A simple CMake file was made for the purpose of compiling the FCGI library, through the CMake `add_subdirectory` function (See the project root CMake file for an example).
 
 
-# Licensing
+### Licensing
 
 Version 2.4.0 of the FCGI reference library is owned by the Open Market corporation, see the `LICENSE.TERMS` file included in the FCGI library folder for more licensing information with respect to the FCGI reference library.
 
