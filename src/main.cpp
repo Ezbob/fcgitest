@@ -10,6 +10,7 @@ extern char ** environ;
 #include <iostream>
 #include <sstream>
 #include "fcgipp/request.hpp"
+#include "asio.hpp"
 
 
 static void penv(const char * const * envp, std::stringstream &stream)

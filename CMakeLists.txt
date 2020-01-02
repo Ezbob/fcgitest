@@ -33,17 +33,19 @@ SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static-libgcc -static-lib
 
 SET(EXEC_NAME "${PROJECT_NAME}")
 
-SET(FCGI_LIB_DIR "${CMAKE_CURRENT_SOURCE_DIR}/lib/fcgi-2.4.0")
+SET(LIB_DIR "${CMAKE_CURRENT_SOURCE_DIR}/lib")
 
 # Next steps:
 SET(SOURCES
     "${SOURCES_PREFIX}/main.cpp"
 )
+
 SET(INCLUDES
     "${CMAKE_CURRENT_SOURCE_DIR}/include"
+    "${LIB_DIR}/asio/asio/include"
 )
 
-ADD_SUBDIRECTORY(${FCGI_LIB_DIR})
+ADD_SUBDIRECTORY("${LIB_DIR}/fcgi-2.4.0")
 
 # Adds an executable
 ADD_EXECUTABLE(${EXEC_NAME} "")
@@ -58,43 +60,6 @@ TARGET_INCLUDE_DIRECTORIES(${EXEC_NAME} PRIVATE ${INCLUDES})
 
 TARGET_LINK_LIBRARIES(${EXEC_NAME} PRIVATE fcgi-lib)
 
-# the echo example
-
-ADD_EXECUTABLE("echo-cpp" "")
-
-TARGET_SOURCES("echo-cpp" PRIVATE "${FCGI_LIB_DIR}/examples/echo-cpp.cpp")
-
-#TARGET_INCLUDE_DIRECTORIES("echo-cpp" PRIVATE ${FCGI_INCLUDE})
-
-TARGET_LINK_LIBRARIES("echo-cpp" PRIVATE fcgi-lib)
-
-# # Adds a (STATIC) library
-# # STATIC adds archive files ".a" that can included in a compile process
-# # SHARED adds .dll, .so or .dynlib
-# ADD_LIBRARY(${EXEC_NAME} STATIC "")
-
-# TARGET_LINK_LIBRARIES(${EXEC_NAME} PRIVATE somecoollib)
-
-# TARGET_INCLUDE_DIRECTORIES(${EXEC_NAME} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/include")
-
-# # There are also non-"Target_" version of most of the above these does not "bind" to
-# # a specific target (not the best of idea for encapsulation)
-
-# # Adds and merges some subdir's CMakeLists.txt. This makes the Commands available in that
-# # subdirectory's CMakeLists.txt available to this. This can cause some command name-clashes so beware
-# ADD_SUBDIRECTORY(another_dir)
-
-# # Custom targets. Here is a post build that strips a binary when in release
-# if(${CMAKE_BUILD_TYPE}, Release)
-# add_custom_command(TARGET ${EXEC_NAME}
-#     POST_BUILD
-#     COMMAND strip ${EXEC_NAME}
-# )
-# endif()
-
-# Do something depending on windows is the platform
-# if(${WIN32})
-#
-# else()
-#
-# endif()
+if(WIN32)
+    TARGET_LINK_LIBRARIES(${EXEC_NAME} PRIVATE ws2_32)
+endif(WIN32)
