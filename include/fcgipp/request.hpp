@@ -18,7 +18,7 @@ public:
         if (m_is_accepted) FCGX_Finish_r(&m_request);
     }
 
-    operator FCGX_Request &() {
+    explicit operator FCGX_Request &() {
         return m_request;
     }
 
