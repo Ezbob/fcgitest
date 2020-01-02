@@ -21,7 +21,7 @@ USE_CXX11_STANDARD()
 SET(SOURCES_PREFIX "${CMAKE_CURRENT_SOURCE_DIR}/src")
 
 # A set of compilation flags that is always on when compiling C++
-SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Dc_plusplus")
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Dc_plusplus -DASIO_STANDALONE")
 
 # Compilation flags that depends on build type
 # A symbol _DEBUG is exposed to enable conditional compilation through preprocessor directives
