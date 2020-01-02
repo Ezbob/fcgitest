@@ -31,9 +31,9 @@ SET(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3")
 # Linker flags. This just makes the c and c++ stdlibs statically linked for higher portability
 SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static-libgcc -static-libstdc++")
 
-SET(EXEC_NAME "${PROJECT_NAME}")
-
 SET(LIB_DIR "${CMAKE_CURRENT_SOURCE_DIR}/lib")
+
+SET(EXEC_NAME "${PROJECT_NAME}")
 
 # Next steps:
 SET(SOURCES
@@ -47,12 +47,7 @@ SET(INCLUDES
 
 ADD_SUBDIRECTORY("${LIB_DIR}/fcgi-2.4.0")
 
-# Adds an executable
 ADD_EXECUTABLE(${EXEC_NAME} "")
-
-# Target_Sources works best when sources has been set to "" in lib/exe (this then becomes a legacy parameter)
-# Target_Sources helps with transitive scoping (i.e. PRIVATE, PUBLIC or INTERFACE)
-# all TARGET_* needs to defined after the target (since it has to be there first)
 
 TARGET_SOURCES(${EXEC_NAME} PRIVATE ${SOURCES})
 
