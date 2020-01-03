@@ -28,4 +28,9 @@ public:
     }
 };
 
+template<typename Dispatcher_t, typename Authenticator_t>
+FcgiApplicationServer<Dispatcher_t, Authenticator_t> make_server(asio::io_context &io, Authenticator_t &a, Dispatcher_t &d) {
+    return FcgiApplicationServer<Dispatcher_t, Authenticator_t>(io, a, d);
+}
+
 #endif

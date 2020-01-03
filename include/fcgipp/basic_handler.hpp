@@ -14,7 +14,7 @@ public:
 };
 
 template<typename Derived_t>
-BasicHandler::Ptr_Type create_handler() {
+BasicHandler::Ptr_Type make_handler() {
     return std::make_shared<Derived_t>();
 }
 

@@ -83,21 +83,21 @@ private:
 
 int main(void) {
 
+    if ( FCGX_Init() != 0 ) return 1;
+
     asio::io_context io;
 
-    auto root_handler = create_handler<MyHandler>();
-
     auto dispatcher = UriDispatcher(io);
+    auto authenticator = DefaultAuthenticator();
+
+    auto root_handler = make_handler<MyHandler>();
 
     dispatcher.add_handler("/echo/", root_handler);
     dispatcher.add_handler("/echo", root_handler);
 
-    auto authenticator = DefaultAuthenticator();
-    auto acceptor = FcgiApplicationServer<UriDispatcher, DefaultAuthenticator>(io, authenticator, dispatcher);
+    auto server = make_server(io, authenticator, dispatcher);
 
-    FCGX_Init();
-
-    io.post(acceptor);
+    io.post(server);
 
     io.run();
 
