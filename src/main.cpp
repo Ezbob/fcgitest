@@ -12,6 +12,7 @@ extern char ** environ;
 #include "fcgipp/request.hpp"
 #include "fcgipp/basic_handler.hpp"
 #include "fcgipp/authenticator.hpp"
+#include "fcgipp/uri_dispatcher.hpp"
 #include "fcgipp/server.hpp"
 #include "asio.hpp"
 
@@ -49,57 +50,6 @@ public:
 
         FCGX_PutStr(val.c_str(), val.size(), req->out());
     }
-};
-
-class DefaultNotFoundHandler : public BasicHandler {
-public:
-    void handle(Request_Ptr_Type req) {
-        FCGX_PutS("HTTP/1.1 404 Not Found\r\nStatus: 404 Not Found\r\nContent-type: text/html\r\n\r\n<H1>404 Not found</H1>\n", req->out());
-    }
-};
-
-class UriDispatcher {
-
-public:
-    UriDispatcher(asio::io_context &io, BasicHandler::Ptr_Type not_found_handler)
-        : m_io_ctx(io), m_not_found_handler_ptr(not_found_handler) {}
-
-    UriDispatcher(asio::io_context &io)
-        : m_io_ctx(io), m_not_found_handler_ptr(make_handler<DefaultNotFoundHandler>()) {}
-
-    void dispatch(BasicHandler::Request_Ptr_Type req_ptr) {
-        auto uri = FCGX_GetParam("REQUEST_URI", req_ptr->envp());
-
-        if (uri) {
-            auto key = std::string(uri);
-            auto it = m_dispatch_matrix.find(key);
-            if ( it != m_dispatch_matrix.end() ) {
-                BasicHandler::Ptr_Type handler_ptr = it->second;
-
-                m_io_ctx.post([handler_ptr, req_ptr] {
-                    handler_ptr->handle(req_ptr);
-                });
-            } else {
-
-                m_io_ctx.post([this, req_ptr] {
-                    m_not_found_handler_ptr->handle(req_ptr);
-                });
-            }
-        } else {
-            m_io_ctx.post([this, req_ptr] {
-                m_not_found_handler_ptr->handle(req_ptr);
-            });
-        }
-    }
-
-    void add_handler(std::string uri, BasicHandler::Ptr_Type req) {
-        m_dispatch_matrix[uri] = req;
-    }
-
-private:
-    std::map<std::string, BasicHandler::Ptr_Type> m_dispatch_matrix;
-    asio::io_context &m_io_ctx;
-    BasicHandler::Ptr_Type m_not_found_handler_ptr;
 };
 
 int main(void) {
