@@ -54,7 +54,7 @@ public:
 class DefaultNotFoundHandler : public BasicHandler {
 public:
     void handle(Request_Ptr_Type req) {
-        FCGX_PutS("Content-type: text/html\r\n\r\n<H1>404 Not found</H1>\n", req->out());
+        FCGX_PutS("HTTP/1.1 404 Not Found\r\nStatus: 404 Not Found\r\nContent-type: text/html\r\n\r\n<H1>404 Not found</H1>\n", req->out());
     }
 };
 
