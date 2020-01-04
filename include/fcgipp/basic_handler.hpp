@@ -13,9 +13,9 @@ public:
     virtual void handle(Request_Ptr_Type request) = 0;
 };
 
-template<typename Derived_t>
-BasicHandler::Ptr_Type make_handler() {
-    return std::make_shared<Derived_t>();
+template<typename Derived_t, typename... Arg_t>
+BasicHandler::Ptr_Type make_handler(Arg_t... args) {
+    return std::make_shared<Derived_t>(args...);
 }
 
 #endif

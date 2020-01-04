@@ -7,7 +7,7 @@
 #include <memory>
 
 struct DefaultAuthenticator {
-    bool is_authentic(std::shared_ptr<FcgiRequest> const &) {
+    bool is_valid(std::shared_ptr<FcgiRequest> const &) {
         return true;
     }
 };

@@ -5,32 +5,32 @@
 #include "request.hpp"
 #include "asio.hpp"
 
-template<typename Dispatcher_t, typename Authenticator_t>
+template<typename Dispatcher_t>
 class FcgiApplicationServer {
-
     asio::io_context &m_io;
     Dispatcher_t &m_dispatcher;
-    Authenticator_t &m_authenticator;
-
 public:
-    FcgiApplicationServer(asio::io_context &io, Authenticator_t &a, Dispatcher_t &d)
-        : m_io(io), m_dispatcher(d), m_authenticator(a) {}
+    FcgiApplicationServer(asio::io_context &io, Dispatcher_t &d)
+        : m_io(io)
+        , m_dispatcher(d)
+    {}
 
     void operator() () {
         auto request = FcgiRequest::create();
 
         if ( request->accept() ) {
-            if ( m_authenticator.is_authentic(request) ) {
+            m_io.post([this, request]() {
                 m_dispatcher.dispatch(request);
-            }
+            });
+
             m_io.post(*this);
         }
     }
 };
 
-template<typename Dispatcher_t, typename Authenticator_t>
-FcgiApplicationServer<Dispatcher_t, Authenticator_t> make_server(asio::io_context &io, Authenticator_t &a, Dispatcher_t &d) {
-    return FcgiApplicationServer<Dispatcher_t, Authenticator_t>(io, a, d);
+template<typename Dispatcher_t>
+FcgiApplicationServer<Dispatcher_t> make_server(asio::io_context &io, Dispatcher_t &d) {
+    return FcgiApplicationServer<Dispatcher_t>(io, d);
 }
 
 #endif

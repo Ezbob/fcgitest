@@ -38,7 +38,6 @@ SET(EXEC_NAME "${PROJECT_NAME}")
 # Next steps:
 SET(SOURCES
     "${SOURCES_PREFIX}/main.cpp"
-    "${SOURCES_PREFIX}/fcgipp/uri_dispatcher.cpp"
     "${SOURCES_PREFIX}/fcgipp/request.cpp"
 )
 

@@ -58,15 +58,15 @@ int main(void) {
 
     asio::io_context io;
 
-    auto dispatcher = UriDispatcher(io);
     auto authenticator = DefaultAuthenticator();
+    auto dispatcher = UriDispatcher<DefaultAuthenticator>(authenticator);
 
     auto root_handler = make_handler<MyHandler>();
 
     dispatcher.add_handler("/echo/", root_handler);
     dispatcher.add_handler("/echo", root_handler);
 
-    auto server = make_server(io, authenticator, dispatcher);
+    auto server = make_server(io, dispatcher);
 
     io.post(server);
 
