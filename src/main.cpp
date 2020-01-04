@@ -63,8 +63,7 @@ int main(void) {
 
     auto root_handler = make_handler<MyHandler>();
 
-    dispatcher.add_handler("/echo/", root_handler);
-    dispatcher.add_handler("/echo", root_handler);
+    dispatcher.add_handler("/", root_handler);
 
     auto server = make_server(io, dispatcher);
 
