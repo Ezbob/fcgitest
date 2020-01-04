@@ -50,7 +50,7 @@ public:
         });
     }
 
-    void add_handler(std::string uri, BasicHandler::Ptr_Type req) {
+    void add_endpoint(std::string uri, BasicHandler::Ptr_Type req) {
         m_dispatch_matrix[uri] = req;
     }
 
