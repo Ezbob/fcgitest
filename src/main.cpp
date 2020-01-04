@@ -57,9 +57,9 @@ int main(void) {
     if ( FCGX_Init() != 0 ) return 1;
 
     asio::io_context io;
-
     auto authenticator = DefaultAuthenticator();
-    auto dispatcher = UriDispatcher<DefaultAuthenticator>(authenticator);
+
+    auto dispatcher = make_dispatcher(io, authenticator);
 
     auto root_handler = make_handler<MyHandler>();
 

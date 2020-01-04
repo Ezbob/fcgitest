@@ -9,32 +9,39 @@
 #include <memory>
 #include <string>
 
-template<typename Authenticator_t>
+template<typename Async_t, typename Authenticator_t>
 class UriDispatcher {
 public:
 
-    UriDispatcher(Authenticator_t &auth) : m_authenticator(auth) {}
+    UriDispatcher(Async_t &aio, Authenticator_t &auth)
+        : m_async_scheduler(aio)
+        , m_authenticator(auth)
+        {}
 
     void dispatch(BasicHandler::Request_Ptr_Type req_ptr) {
-        if (m_authenticator.is_valid(req_ptr)) {
+        BasicHandler::Ptr_Type current_handler;
 
+        if (m_authenticator.is_valid(req_ptr)) {
             auto uri = FCGX_GetParam("REQUEST_URI", req_ptr->envp());
 
             if (uri) {
                 auto key = std::string(uri);
                 auto it = m_dispatch_matrix.find(key);
                 if ( it != m_dispatch_matrix.end() ) {
-                    BasicHandler::Ptr_Type handler_ptr = it->second;
-                    handler_ptr->handle(req_ptr);
+                    current_handler = it->second;
                 } else {
-                    m_handler_404->handle(req_ptr);
+                    current_handler = m_handler_404;
                 }
             } else {
-                m_handler_404->handle(req_ptr);
+                current_handler = m_handler_404;
             }
         } else {
-            m_handler_401->handle(req_ptr);
+            current_handler = m_handler_401;
         }
+
+        m_async_scheduler.post([req_ptr, current_handler]{
+            current_handler->handle(req_ptr);
+        });
     }
 
     void add_handler(std::string uri, BasicHandler::Ptr_Type req) {
@@ -47,7 +54,13 @@ private:
     BasicHandler::Ptr_Type m_handler_404 = make_handler<DefaultNotFoundHandler>();
     BasicHandler::Ptr_Type m_handler_401 = make_handler<DefaultUnauthorizedHandler>();
 
+    Async_t &m_async_scheduler;
     Authenticator_t &m_authenticator;
 };
+
+template<typename Async_t, typename Authenticator_t>
+UriDispatcher<Async_t, Authenticator_t> make_dispatcher(Async_t &async, Authenticator_t &auth) {
+    return UriDispatcher<Async_t, Authenticator_t>(async, auth);
+}
 
 #endif
