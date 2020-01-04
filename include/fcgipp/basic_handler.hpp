@@ -7,6 +7,9 @@
 
 class BasicHandler {
 public:
+    BasicHandler() = default;
+    ~BasicHandler() = default;
+
     using Ptr_Type = std::shared_ptr<BasicHandler>;
     using Request_Ptr_Type = std::shared_ptr<FcgiRequest>;
 

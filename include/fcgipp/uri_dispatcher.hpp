@@ -22,7 +22,7 @@ public:
         BasicHandler::Ptr_Type current_handler;
 
         if (m_authenticator.is_valid(req_ptr)) {
-            auto uri = FCGX_GetParam("REQUEST_URI", req_ptr->envp());
+            auto uri = FCGX_GetParam("PATH_INFO", req_ptr->envp());
 
             if (uri) {
                 auto key = std::string(uri);
@@ -32,8 +32,14 @@ public:
                 } else {
                     current_handler = m_handler_404;
                 }
-            } else {
-                current_handler = m_handler_404;
+            } else { // PATH_INFO is not here we are aiming for /
+                auto key = std::string("/");
+                auto it = m_dispatch_matrix.find(key);
+                if ( it != m_dispatch_matrix.end() ) {
+                    current_handler = it->second;
+                } else {
+                    current_handler = m_handler_404;
+                }
             }
         } else {
             current_handler = m_handler_401;
