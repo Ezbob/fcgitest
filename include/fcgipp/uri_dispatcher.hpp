@@ -9,8 +9,6 @@
 #include <memory>
 #include <string>
 
-
-
 template<typename Authenticator_t>
 class UriDispatcher {
 public:
