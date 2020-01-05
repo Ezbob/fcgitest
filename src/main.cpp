@@ -32,7 +32,7 @@ class MyHandler : public fcgipp::BasicHandler {
 
 public:
     void handle(Request_Ptr_Type req) {
-        auto &out = req->out();
+        auto out = std::stringstream();
         out << "Content-type: text/html\r\n\r\n"
                 "<TITLE>echo-cpp</TITLE>\n"
                 "<H1>echo-cpp</H1>\n"
@@ -44,6 +44,10 @@ public:
 
         out << "<H4>Fcgi Environment</H4>\n";
         penv(req->envp(), out);
+
+        auto val = out.str();
+
+        FCGX_PutS(val.c_str(), req->out_raw());
     }
 };
 
