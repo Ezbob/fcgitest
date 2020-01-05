@@ -5,30 +5,33 @@
 #include "request.hpp"
 #include "asio.hpp"
 
-template<typename Dispatcher_t>
-class FcgiApplicationServer {
-    asio::io_context &m_io;
-    Dispatcher_t &m_dispatcher;
-public:
-    FcgiApplicationServer(asio::io_context &io, Dispatcher_t &d)
-        : m_io(io)
-        , m_dispatcher(d)
-    {}
+namespace fcgipp {
 
-    void operator() () {
-        auto request = FcgiRequest::create();
+    template<typename Dispatcher_t>
+    class FcgiApplicationServer {
+        asio::io_context &m_io;
+        Dispatcher_t &m_dispatcher;
+    public:
+        FcgiApplicationServer(asio::io_context &io, Dispatcher_t &d)
+            : m_io(io)
+            , m_dispatcher(d)
+        {}
 
-        if ( request->accept() ) {
-            m_dispatcher.dispatch(request);
+        void operator() () {
+            auto request = FcgiRequest::create();
 
-            m_io.post(*this);
+            if ( request->accept() ) {
+                m_dispatcher.dispatch(request);
+
+                m_io.post(*this);
+            }
         }
+    };
+
+    template<typename Async_t, typename Dispatcher_t>
+    FcgiApplicationServer<Dispatcher_t> make_server(Async_t &async, Dispatcher_t &d) {
+        return FcgiApplicationServer<Dispatcher_t>(async, d);
     }
 };
-
-template<typename Async_t, typename Dispatcher_t>
-FcgiApplicationServer<Dispatcher_t> make_server(Async_t &async, Dispatcher_t &d) {
-    return FcgiApplicationServer<Dispatcher_t>(async, d);
-}
 
 #endif

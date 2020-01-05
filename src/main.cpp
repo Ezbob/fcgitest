@@ -8,11 +8,10 @@ extern char ** environ;
 
 #include "fcgiapp.h"
 #include <sstream>
-#include <map>
 #include "fcgipp/request.hpp"
 #include "fcgipp/basic_handler.hpp"
 #include "fcgipp/authenticator.hpp"
-#include "fcgipp/uri_dispatcher.hpp"
+#include "fcgipp/dispatcher.hpp"
 #include "fcgipp/server.hpp"
 #include "asio.hpp"
 
@@ -29,7 +28,7 @@ static void penv(const char * const * envp, std::stringstream &stream)
 static long g_pid = getpid();
 static int g_count = 0;
 
-class MyHandler : public BasicHandler {
+class MyHandler : public fcgipp::BasicHandler {
 
 public:
     void handle(Request_Ptr_Type req) {
@@ -57,11 +56,11 @@ int main(void) {
     if ( FCGX_Init() != 0 ) return 1;
 
     asio::io_context io;
-    auto authenticator = DefaultAuthenticator();
+    auto authenticator = fcgipp::make_authenticator<fcgipp::DefaultAuthenticator>();
 
-    auto dispatcher = make_dispatcher(io, authenticator);
+    auto dispatcher = fcgipp::make_dispatcher<fcgipp::UriDispatcher>(io, authenticator);
 
-    auto root_handler = make_handler<MyHandler>();
+    auto root_handler = fcgipp::make_handler<MyHandler>();
 
     dispatcher.add_endpoint("/", root_handler);
 

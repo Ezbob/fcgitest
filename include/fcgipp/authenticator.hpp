@@ -6,10 +6,18 @@
 #include "request.hpp"
 #include <memory>
 
-struct DefaultAuthenticator {
-    bool is_valid(std::shared_ptr<FcgiRequest> const &) {
-        return true;
+namespace fcgipp {
+    struct DefaultAuthenticator {
+        bool is_valid(std::shared_ptr<FcgiRequest> const &) {
+            return true;
+        }
+    };
+
+    template<typename Authenticator_t>
+    Authenticator_t make_authenticator() {
+        return Authenticator_t();
     }
 };
+
 
 #endif
