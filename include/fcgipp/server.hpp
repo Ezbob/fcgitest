@@ -7,13 +7,13 @@
 
 namespace fcgipp {
 
-    template<typename Dispatcher_t>
+    template<typename Async_t, typename Dispatcher_t>
     class FcgiApplicationServer {
-        asio::io_context &m_io;
+        Async_t &m_async_scheduler;
         Dispatcher_t &m_dispatcher;
     public:
-        FcgiApplicationServer(asio::io_context &io, Dispatcher_t &d)
-            : m_io(io)
+        FcgiApplicationServer(Async_t &async_scheduler, Dispatcher_t &d)
+            : m_async_scheduler(async_scheduler)
             , m_dispatcher(d)
         {}
 
@@ -23,14 +23,14 @@ namespace fcgipp {
             if ( request->accept() ) {
                 m_dispatcher.dispatch(request);
 
-                m_io.post(*this);
+                m_async_scheduler.post(*this);
             }
         }
     };
 
     template<typename Async_t, typename Dispatcher_t>
-    FcgiApplicationServer<Dispatcher_t> make_server(Async_t &async, Dispatcher_t &d) {
-        return FcgiApplicationServer<Dispatcher_t>(async, d);
+    FcgiApplicationServer<Async_t, Dispatcher_t> make_server(Async_t &async, Dispatcher_t &d) {
+        return FcgiApplicationServer<Async_t, Dispatcher_t>(async, d);
     }
 };
 

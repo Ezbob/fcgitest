@@ -64,7 +64,7 @@ int main(void) {
 
     dispatcher.add_endpoint("/", root_handler);
 
-    auto server = make_server(io, dispatcher);
+    auto server = fcgipp::make_server(io, dispatcher);
 
     io.post(server);
 
