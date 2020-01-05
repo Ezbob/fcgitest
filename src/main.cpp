@@ -15,7 +15,7 @@ extern char ** environ;
 #include "fcgipp/server.hpp"
 #include "asio.hpp"
 
-static void penv(const char * const * envp, std::stringstream &stream)
+static void penv(const char * const * envp, std::ostream &stream)
 {
     stream << "<PRE>\n";
     for ( ; *envp; ++envp)
@@ -32,7 +32,7 @@ class MyHandler : public fcgipp::BasicHandler {
 
 public:
     void handle(Request_Ptr_Type req) {
-        std::stringstream out;
+        auto &out = req->out();
         out << "Content-type: text/html\r\n\r\n"
                 "<TITLE>echo-cpp</TITLE>\n"
                 "<H1>echo-cpp</H1>\n"
@@ -44,10 +44,6 @@ public:
 
         out << "<H4>Fcgi Environment</H4>\n";
         penv(req->envp(), out);
-
-        auto val = out.str();
-
-        FCGX_PutStr(val.c_str(), val.size(), req->out());
     }
 };
 
@@ -56,6 +52,7 @@ int main(void) {
     if ( FCGX_Init() != 0 ) return 1;
 
     asio::io_context io;
+
     auto authenticator = fcgipp::make_authenticator<fcgipp::DefaultAuthenticator>();
 
     auto dispatcher = fcgipp::make_dispatcher<fcgipp::UriDispatcher>(io, authenticator);
