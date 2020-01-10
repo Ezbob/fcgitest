@@ -8,11 +8,7 @@ extern char ** environ;
 
 #include "fcgiapp.h"
 #include <sstream>
-#include "fcgipp/request.hpp"
-#include "fcgipp/basic_handler.hpp"
-#include "fcgipp/authenticator.hpp"
-#include "fcgipp/dispatcher.hpp"
-#include "fcgipp/server.hpp"
+#include "fcgipp/fcgi.hpp"
 #include "asio.hpp"
 
 static void penv(const char * const * envp, std::ostream &stream)
@@ -29,15 +25,17 @@ static long g_pid = getpid();
 static int g_count = 0;
 
 class MyHandler : public fcgipp::BasicHandler {
-
+    fcgipp::HttpResponse resp;
+    std::ostream &out = resp.body();
 public:
-    void handle(Request_Ptr_Type req) {
-        auto out = std::stringstream();
-        out << "Content-type: text/html\r\n\r\n"
-                "<TITLE>echo-cpp</TITLE>\n"
-                "<H1>echo-cpp</H1>\n"
-                "<H4>PID: " << g_pid << "</H4>\n"
-                "<H4>Request Number: " << ++g_count << "</H4>\n";
+    void handle(std::shared_ptr<fcgipp::FcgiRequest> req) {
+
+        resp.put_header("Content-type", "text/html");
+
+        out << "<TITLE>echo-cpp</TITLE>"
+                "<H1>echo-cpp</H1>"
+                "<H4>PID: " << g_pid << "</H4>"
+                "<H4>Request Number: " << ++g_count << "</H4>";
 
         out << "<H4>Process/Initial Environment</H4>\n";
         penv(environ, out);
@@ -45,9 +43,7 @@ public:
         out << "<H4>Fcgi Environment</H4>\n";
         penv(req->envp(), out);
 
-        auto val = out.str();
-
-        FCGX_PutS(val.c_str(), req->out_raw());
+        req->answerWith(resp);
     }
 };
 
@@ -57,9 +53,9 @@ int main(void) {
 
     asio::io_context io;
 
-    auto authenticator = fcgipp::make_authenticator<fcgipp::DefaultAuthenticator>();
+    auto authenticator = fcgipp::DefaultAuthenticator();
 
-    auto dispatcher = fcgipp::make_dispatcher<fcgipp::UriDispatcher>(io, authenticator);
+    auto dispatcher = fcgipp::UriDispatcher<asio::io_context>(io, authenticator);
 
     auto root_handler = fcgipp::make_handler<MyHandler>();
 

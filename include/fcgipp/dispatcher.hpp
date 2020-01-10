@@ -4,6 +4,7 @@
 
 #include "basic_handler.hpp"
 #include "handlers.hpp"
+#include "authenticator.hpp"
 #include "fcgiapp.h"
 #include <unordered_map>
 #include <memory>
@@ -11,7 +12,7 @@
 
 namespace fcgipp {
 
-    template<typename Async_t, typename Authenticator_t>
+    template<typename Async_t, typename Authenticator_t = DefaultAuthenticator>
     class UriDispatcher {
     public:
         UriDispatcher(Async_t &aio, Authenticator_t &auth)
@@ -19,8 +20,8 @@ namespace fcgipp {
             , m_authenticator(auth)
             {}
 
-        void dispatch(BasicHandler::Request_Ptr_Type req_ptr) {
-            BasicHandler::Ptr_Type current_handler;
+        void dispatch(std::shared_ptr<FcgiRequest> req_ptr) {
+            std::shared_ptr<BasicHandler> current_handler;
 
             if (m_authenticator.is_valid(req_ptr)) {
                 auto uri = FCGX_GetParam("PATH_INFO", req_ptr->envp());
@@ -51,15 +52,15 @@ namespace fcgipp {
             });
         }
 
-        void add_endpoint(std::string uri, BasicHandler::Ptr_Type req) {
+        void add_endpoint(std::string uri, std::shared_ptr<BasicHandler> req) {
             m_dispatch_matrix[uri] = req;
         }
 
     private:
-        std::unordered_map<std::string, BasicHandler::Ptr_Type> m_dispatch_matrix;
+        std::unordered_map<std::string, std::shared_ptr<BasicHandler>> m_dispatch_matrix;
 
-        BasicHandler::Ptr_Type m_handler_404 = make_handler<DefaultNotFoundHandler>();
-        BasicHandler::Ptr_Type m_handler_401 = make_handler<DefaultUnauthorizedHandler>();
+        std::shared_ptr<BasicHandler> m_handler_404 = make_handler<DefaultNotFoundHandler>();
+        std::shared_ptr<BasicHandler> m_handler_401 = make_handler<DefaultUnauthorizedHandler>();
 
         Async_t &m_async_scheduler;
         Authenticator_t &m_authenticator;

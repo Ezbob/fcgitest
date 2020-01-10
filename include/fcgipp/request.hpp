@@ -5,6 +5,8 @@
 #include <sstream>
 #include <iostream>
 #include <memory>
+#include <cstring>
+#include "handler_response.hpp"
 #include "fcgiapp.h"
 
 namespace fcgipp {
@@ -22,9 +24,7 @@ namespace fcgipp {
         bool m_is_accepted;
 
     public:
-        FcgiRequest()
-            : m_is_accepted(false)
-        {
+        FcgiRequest() : m_is_accepted(false) {
             FCGX_InitRequest(&m_request, 0, 0);
         }
 
@@ -59,6 +59,19 @@ namespace fcgipp {
 
         char **envp() {
             return m_request.envp;
+        }
+
+        int answerWith(BasicResponse &res) {
+            auto r = res.render();
+            return FCGX_PutStr(r.c_str(), r.size(), m_request.out);
+        }
+
+        int answerWith(std::string &res) {
+            return FCGX_PutStr(res.c_str(), res.size(), m_request.out);
+        }
+
+        int answerWith(const char *res) {
+            return FCGX_PutStr(res, std::strlen(res), m_request.out);
         }
 
         std::shared_ptr<FcgiRequest> get() {

@@ -12,11 +12,6 @@ namespace fcgipp {
             return true;
         }
     };
-
-    template<typename Authenticator_t>
-    Authenticator_t make_authenticator() {
-        return Authenticator_t();
-    }
 };
 
 

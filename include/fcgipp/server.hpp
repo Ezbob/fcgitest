@@ -14,8 +14,7 @@ namespace fcgipp {
     public:
         FcgiApplicationServer(Async_t &async_scheduler, Dispatcher_t &d)
             : m_async_scheduler(async_scheduler)
-            , m_dispatcher(d)
-        {}
+            , m_dispatcher(d) {}
 
         void operator() () {
             auto request = FcgiRequest::create();
