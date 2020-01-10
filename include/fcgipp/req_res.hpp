@@ -14,27 +14,27 @@ namespace fcgipp {
      * C++11 shared_ptr wrapper for FCGI requests.
      *
      * For convenience sake, a static factory `create` method is included
-     * to create new FcgiRequest instances that are wrapped in a
-     * shared_ptr. A FcgiRequest instance can also create more shared_ptr to itself by the `get` method.
+     * to create new FcgiReqRes instances that are wrapped in a
+     * shared_ptr. A FcgiReqRes instance can also create more shared_ptr to itself by the `get` method.
      *
      * When the reference count reaches zero, the request is finished if it has been accepted.
      */
-    class FcgiRequest : std::enable_shared_from_this<FcgiRequest> {
+    class FcgiReqRes : std::enable_shared_from_this<FcgiReqRes> {
         FCGX_Request m_request;
         bool m_is_accepted;
 
     public:
-        FcgiRequest() : m_is_accepted(false) {
+        FcgiReqRes() : m_is_accepted(false) {
             FCGX_InitRequest(&m_request, 0, 0);
         }
 
-        ~FcgiRequest() {
+        ~FcgiReqRes() {
             if (m_is_accepted) {
                 FCGX_Finish_r(&m_request);
             }
         }
 
-        static std::shared_ptr<FcgiRequest> create();
+        static std::shared_ptr<FcgiReqRes> create();
 
         bool accept() {
             m_is_accepted = (FCGX_Accept_r(&m_request) == 0);
@@ -74,7 +74,7 @@ namespace fcgipp {
             return FCGX_PutStr(res, std::strlen(res), m_request.out);
         }
 
-        std::shared_ptr<FcgiRequest> get() {
+        std::shared_ptr<FcgiReqRes> get() {
             return shared_from_this();
         }
     };

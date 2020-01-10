@@ -26,7 +26,7 @@ static int g_count = 0;
 
 class MyHandler : public fcgipp::BasicHandler {
 public:
-    void handle(std::shared_ptr<fcgipp::FcgiRequest> req) {
+    void handle(std::shared_ptr<fcgipp::FcgiReqRes> req) {
         fcgipp::HttpResponse resp;
         std::ostream &out = resp.body();
 

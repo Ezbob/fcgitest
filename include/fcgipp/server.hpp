@@ -2,7 +2,7 @@
 #ifndef _HEADER_FILE_application_server_20200103163952_
 #define _HEADER_FILE_application_server_20200103163952_
 
-#include "request.hpp"
+#include "req_res.hpp"
 #include "asio.hpp"
 
 namespace fcgipp {
@@ -17,7 +17,7 @@ namespace fcgipp {
             , m_dispatcher(d) {}
 
         void operator() () {
-            auto request = FcgiRequest::create();
+            auto request = FcgiReqRes::create();
 
             if ( request->accept() ) {
                 m_dispatcher.dispatch(request);

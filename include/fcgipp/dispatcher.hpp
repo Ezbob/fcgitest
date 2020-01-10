@@ -25,7 +25,7 @@ namespace fcgipp {
             , m_authenticator(DefaultAuthenticator())
             {}
 
-        void dispatch(std::shared_ptr<FcgiRequest> req_ptr) {
+        void dispatch(std::shared_ptr<FcgiReqRes> req_ptr) {
             std::shared_ptr<BasicHandler> current_handler;
 
             if (m_authenticator.is_valid(req_ptr)) {

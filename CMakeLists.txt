@@ -38,7 +38,7 @@ SET(EXEC_NAME "${PROJECT_NAME}")
 # Next steps:
 SET(SOURCES
     "${SOURCES_PREFIX}/main.cpp"
-    "${SOURCES_PREFIX}/fcgipp/request.cpp"
+    "${SOURCES_PREFIX}/fcgipp/req_res.cpp"
 )
 
 SET(INCLUDES

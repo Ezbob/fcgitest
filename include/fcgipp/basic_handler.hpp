@@ -2,7 +2,7 @@
 #ifndef _HEADER_FILE_basic_handler_20200103163230_
 #define _HEADER_FILE_basic_handler_20200103163230_
 
-#include "request.hpp"
+#include "req_res.hpp"
 #include <memory>
 
 namespace fcgipp {
@@ -11,7 +11,7 @@ namespace fcgipp {
         BasicHandler() = default;
         ~BasicHandler() = default;
 
-        virtual void handle(std::shared_ptr<FcgiRequest> request) = 0;
+        virtual void handle(std::shared_ptr<FcgiReqRes> request) = 0;
     };
 
     template<typename Derived_t, typename... Arg_t>
