@@ -20,6 +20,11 @@ namespace fcgipp {
             , m_authenticator(auth)
             {}
 
+        UriDispatcher(Async_t &aio)
+            : m_async_scheduler(aio)
+            , m_authenticator(DefaultAuthenticator())
+            {}
+
         void dispatch(std::shared_ptr<FcgiRequest> req_ptr) {
             std::shared_ptr<BasicHandler> current_handler;
 
@@ -63,13 +68,9 @@ namespace fcgipp {
         std::shared_ptr<BasicHandler> m_handler_401 = make_handler<DefaultUnauthorizedHandler>();
 
         Async_t &m_async_scheduler;
-        Authenticator_t &m_authenticator;
+        Authenticator_t m_authenticator;
     };
 
-    template<template<typename, typename, typename...> typename Dispatcher_t, typename Async_t, typename Authenticator_t, typename... Args_t>
-    Dispatcher_t<Async_t, Authenticator_t, Args_t...> make_dispatcher(Async_t &async, Authenticator_t &auth, Args_t... args) {
-        return Dispatcher_t<Async_t, Authenticator_t, Args_t...>(async, auth, args...);
-    }
 };
 
 #endif

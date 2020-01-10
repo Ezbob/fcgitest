@@ -53,9 +53,7 @@ int main(void) {
 
     asio::io_context io;
 
-    auto authenticator = fcgipp::DefaultAuthenticator();
-
-    auto dispatcher = fcgipp::UriDispatcher<asio::io_context>(io, authenticator);
+    auto dispatcher = fcgipp::UriDispatcher<asio::io_context>(io);
 
     auto root_handler = fcgipp::make_handler<MyHandler>();
 
