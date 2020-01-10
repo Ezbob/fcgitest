@@ -25,10 +25,10 @@ static long g_pid = getpid();
 static int g_count = 0;
 
 class MyHandler : public fcgipp::BasicHandler {
-    fcgipp::HttpResponse resp;
-    std::ostream &out = resp.body();
 public:
     void handle(std::shared_ptr<fcgipp::FcgiRequest> req) {
+        fcgipp::HttpResponse resp;
+        std::ostream &out = resp.body();
 
         resp.put_header("Content-type", "text/html");
 
