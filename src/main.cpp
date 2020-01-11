@@ -13,12 +13,12 @@ extern char ** environ;
 
 static void penv(const char * const * envp, std::ostream &stream)
 {
-    stream << "<PRE>\n";
+    stream << "<pre>" << fcgipp::HTTP_LINE_END;
     for ( ; *envp; ++envp)
     {
-        stream << *envp << "\n";
+        stream << *envp << fcgipp::HTTP_LINE_END;
     }
-    stream << "</PRE>\n";
+    stream << "</pre>";
 }
 
 static long g_pid = getpid();
@@ -32,16 +32,24 @@ public:
 
         resp.put_header("Content-type", "text/html");
 
-        out << "<TITLE>echo-cpp</TITLE>"
-                "<H1>echo-cpp</H1>"
-                "<H4>PID: " << g_pid << "</H4>"
-                "<H4>Request Number: " << ++g_count << "</H4>";
+        out << "<html>";
+        out << "<head>"
+                    "<title>echo-cpp</title>"
+                    "<meta charset=\"UTF-8\">"
+                "</head>";
 
-        out << "<H4>Process/Initial Environment</H4>\n";
+        out << "<body>"
+                "<h1>echo-cpp</h1>"
+                "<h4>PID: " << g_pid << "</h4>"
+                "<h4>Request Number: " << ++g_count << "</h4>"
+                "<h4>Process/Initial Environment</h4>";
         penv(environ, out);
 
-        out << "<H4>Fcgi Environment</H4>\n";
+        out <<  "<h4>Fcgi Environment</h4>";
         penv(req->envp(), out);
+
+        out << "</body>"
+               "</html>";
 
         req->answerWith(resp);
     }
