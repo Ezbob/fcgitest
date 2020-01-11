@@ -125,6 +125,7 @@ namespace fcgipp {
         }
     };
 
+    std::ostream &operator <<(std::ostream &os, BasicResponse &);
 };
 
 #endif
