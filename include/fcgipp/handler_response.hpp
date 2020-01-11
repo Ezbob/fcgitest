@@ -113,9 +113,10 @@ namespace fcgipp {
 
         std::string render() override {
             std::stringstream res;
+            std::string translated = translate_code();
 
-            res << "HTTP/1.1 " << m_error_code << " " << translate_code() << HTTP_LINE_END;
-            res << "Status: " << m_error_code << " " << translate_code() << HTTP_LINE_END;
+            res << "HTTP/1.1 " << m_error_code << " " << translated << HTTP_LINE_END;
+            res << "Status: " << m_error_code << " " << translated << HTTP_LINE_END;
             res << m_header.str();
             res << HTTP_LINE_END + HTTP_LINE_END;
             res << m_body.str();
