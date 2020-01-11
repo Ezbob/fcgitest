@@ -16,6 +16,7 @@ namespace fcgipp {
     static const std::string HTTP_LINE_END = "\r\n";
 
     class HttpResponse : public BasicResponse {
+    protected:
         std::stringstream m_header;
         std::stringstream m_body;
         int m_error_code = 200;
@@ -123,6 +124,24 @@ namespace fcgipp {
 
             return res.str();
         }
+    };
+
+    class JsonResponse : public HttpResponse {
+
+        std::string render() override {
+            std::stringstream res;
+            std::string translated = translate_code();
+
+            res << "HTTP/1.1 " << m_error_code << " " << translated << HTTP_LINE_END;
+            res << "Status: " << m_error_code << " " << translated << HTTP_LINE_END;
+            res << "Content-Type: application/json" << HTTP_LINE_END;
+            res << m_header.str();
+            res << HTTP_LINE_END + HTTP_LINE_END;
+            res << m_body.str();
+
+            return res.str();
+        }
+
     };
 
     std::ostream &operator <<(std::ostream &os, BasicResponse &);
