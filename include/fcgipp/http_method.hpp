@@ -32,7 +32,7 @@ namespace fcgipp {
         }
     }
 
-    std::string httpmethod_to_string(HttpMethod &m) {
+    std::string httpmethod_to_string(HttpMethod &&m) {
         if (m == HttpMethod::GET) {
             return "GET";
         } else if (m == HttpMethod::POST) {
