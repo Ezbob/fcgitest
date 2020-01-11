@@ -11,8 +11,17 @@ namespace fcgipp {
         DefaultNotFoundHandler() : BasicHandler(HttpMethod::ANY_METHOD) {}
 
         void handle(std::shared_ptr<fcgipp::FcgiReqRes> req) {
-            FCGX_PutS("HTTP/1.1 404 Not Found\r\nStatus: 404 Not Found\r\nContent-type: text/html\r\n\r\n"
-                    "<html><body><H1>404 Not found</H1></body></html>\n", req->out_raw());
+            FCGX_PutS(
+                    "HTTP/1.1 404 Not Found\r\n"
+                    "Status: 404 Not Found\r\n"
+                    "Content-type: text/html\r\n"
+                    "\r\n"
+                    "<html>"
+                        "<head><title>404 Not Found</title><meta charset=\"UTF-8\"></head>"
+                        "<body><h1>404 Not found</h1></body>"
+                    "</html>\r\n",
+                    req->out_raw()
+            );
         }
     };
 
@@ -21,8 +30,17 @@ namespace fcgipp {
         DefaultUnauthorizedHandler() : BasicHandler(HttpMethod::ANY_METHOD) {}
 
         void handle(std::shared_ptr<fcgipp::FcgiReqRes> req) {
-            FCGX_PutS("HTTP/1.1 401 Unauthorized\r\nStatus: 401 Unauthorized\r\nContent-type: text/html\r\n\r\n"
-                    "<html><body><H1>401 Unauthorized</H1></body></html>\n", req->out_raw());
+            FCGX_PutS(
+                    "HTTP/1.1 401 Unauthorized\r\n"
+                    "Status: 401 Unauthorized\r\n"
+                    "Content-type: text/html\r\n"
+                    "\r\n"
+                    "<html>"
+                        "<head><title>401 Unauthorized</title><meta charset=\"UTF-8\"></head>"
+                        "<body><h1>401 Unauthorized</h1></body>"
+                    "</html>\r\n",
+                    req->out_raw()
+            );
         }
     };
 };
