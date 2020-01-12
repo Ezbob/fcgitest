@@ -23,7 +23,7 @@ namespace fcgipp {
 
         UriDispatcher(Async_t &aio)
             : m_async_scheduler(aio)
-            , m_authenticator(DefaultAuthenticator())
+            , m_authenticator(Authenticator_t())
             {}
 
         void dispatch(std::shared_ptr<FcgiReqRes> req_ptr) {
