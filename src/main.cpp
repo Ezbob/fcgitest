@@ -82,18 +82,16 @@ public:
 
 
 int main(void) {
-
     asio::io_context io;
 
-    auto dispatcher = fcgipp::UriDispatcher<asio::io_context>(io);
+    auto server = fcgipp::make_server(io);
+    auto dispatcher = server.get_dispatcher();
 
     auto root_handler = fcgipp::make_handler<MyHandler>();
     auto clock_handler = fcgipp::make_handler<MyJsonHandler>();
 
     dispatcher.add_endpoint("/", root_handler);
     dispatcher.add_endpoint("/time", clock_handler);
-
-    auto server = fcgipp::make_server(io, dispatcher);
 
     io.post(server);
 
