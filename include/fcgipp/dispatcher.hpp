@@ -13,7 +13,7 @@
 
 namespace fcgipp {
 
-    template<typename Async_t, typename Authenticator_t = DefaultAuthenticator>
+    template<typename Async_t, typename Authenticator_t>
     class UriDispatcher {
     public:
         UriDispatcher(Async_t &aio, Authenticator_t &auth)
