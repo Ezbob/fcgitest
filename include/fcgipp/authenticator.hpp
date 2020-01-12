@@ -7,12 +7,14 @@
 #include <memory>
 
 namespace fcgipp {
-    struct DefaultAuthenticator {
+    class DefaultAuthenticator {
+    public:
+        ~DefaultAuthenticator() = default;
+
         bool is_valid(std::shared_ptr<FcgiReqRes> const &) {
             return true;
         }
     };
 };
-
 
 #endif

@@ -13,18 +13,18 @@
 
 namespace fcgipp {
 
-    template<typename Async_t, typename Authenticator_t>
-    class UriDispatcher {
+    template<typename Async_t, typename Authenticator_t = DefaultAuthenticator>
+    class DefaultDispatcher {
     public:
-        UriDispatcher(Async_t &aio, Authenticator_t auth)
+        DefaultDispatcher(Async_t &aio, Authenticator_t auth)
             : m_async_scheduler(aio)
-            , m_authenticator(auth)
-            {}
+            , m_authenticator(auth) {}
 
-        UriDispatcher(Async_t &aio)
+        DefaultDispatcher(Async_t &aio)
             : m_async_scheduler(aio)
-            , m_authenticator(Authenticator_t())
-            {}
+            , m_authenticator(Authenticator_t()) {}
+
+        ~DefaultDispatcher() = default;
 
         void dispatch(std::shared_ptr<FcgiReqRes> req_ptr) {
             std::shared_ptr<BasicHandler> current_handler;
@@ -92,7 +92,6 @@ namespace fcgipp {
         Async_t &m_async_scheduler;
         Authenticator_t m_authenticator;
     };
-
 };
 
 #endif

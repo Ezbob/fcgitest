@@ -8,7 +8,7 @@
 
 namespace fcgipp {
 
-    template<typename Async_t, typename Dispatcher_t>
+    template<typename Async_t, typename Dispatcher_t = DefaultDispatcher<Async_t>>
     class FcgiApplicationServer {
         Async_t &m_async_scheduler;
         Dispatcher_t m_dispatcher;
@@ -35,7 +35,7 @@ namespace fcgipp {
         }
     };
 
-    template<typename Async_t, typename Authenticator_t = DefaultAuthenticator, typename Dispatcher_t = UriDispatcher<Async_t, Authenticator_t>>
+    template<typename Async_t, typename Dispatcher_t = DefaultDispatcher<Async_t>>
     FcgiApplicationServer<Async_t, Dispatcher_t> make_server(Async_t &async) {
         return FcgiApplicationServer<Async_t, Dispatcher_t>(async);
     }
