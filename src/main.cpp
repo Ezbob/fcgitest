@@ -8,8 +8,9 @@ extern char ** environ;
 
 #include "asio.hpp"
 #include "fcgipp/fcgi.hpp"
-
+#include "fcgipp_shims/json11_shim.hpp"
 #include "json11.hpp"
+
 #include <sstream>
 #include <chrono>
 #include <iomanip>
@@ -63,13 +64,18 @@ public:
 class MyJsonHandler : public fcgipp::BasicHandler {
 public:
     void handle(std::shared_ptr<fcgipp::FcgiReqRes> fcgir) {
-        fcgipp::HttpResponse resp;
+        fcgipp::JsonResponse resp;
         std::ostream &out = resp.body();
-        auto t = std::time(nullptr);
 
-        out << "{"
-            << "\"localtime\": \"" << std::put_time(std::localtime(&t), "%c %Z") << "\""
-            << "}";
+        auto t = std::time(nullptr);
+        char timestr[100];
+        std::strftime(timestr, sizeof(timestr), "%c %Z", std::localtime(&t));
+
+        json11::Json j = json11::Json::object {
+            {"localtime", std::string(timestr)}
+        };
+
+        out << j;
 
         fcgir->answerWith(resp);
     }
