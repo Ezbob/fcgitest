@@ -3,6 +3,7 @@
 #define _HEADER_FILE_application_server_20200103163952_
 
 #include "req_res.hpp"
+#include "fcgiapp.h"
 
 namespace fcgipp {
 
@@ -13,7 +14,9 @@ namespace fcgipp {
     public:
         FcgiApplicationServer(Async_t &async_scheduler, Dispatcher_t &d)
             : m_async_scheduler(async_scheduler)
-            , m_dispatcher(d) {}
+            , m_dispatcher(d) {
+            FCGX_Init();
+        }
 
         void operator() () {
             auto request = FcgiReqRes::create();

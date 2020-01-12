@@ -65,7 +65,6 @@ class MyJsonHandler : public fcgipp::BasicHandler {
 public:
     void handle(std::shared_ptr<fcgipp::FcgiReqRes> fcgir) {
         fcgipp::JsonResponse resp;
-        std::ostream &out = resp.body();
 
         auto t = std::time(nullptr);
         char timestr[100];
@@ -75,7 +74,7 @@ public:
             {"localtime", std::string(timestr)}
         };
 
-        out << j;
+        resp.body() << j;
 
         fcgir->answerWith(resp);
     }
@@ -83,8 +82,6 @@ public:
 
 
 int main(void) {
-
-    if ( FCGX_Init() != 0 ) return 1;
 
     asio::io_context io;
 
