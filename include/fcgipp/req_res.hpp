@@ -74,6 +74,10 @@ namespace fcgipp {
             return FCGX_PutStr(res, std::strlen(res), m_request.out);
         }
 
+        int log(std::string &res) {
+            return FCGX_PutStr(res.c_str(), res.size(), m_request.err);
+        }
+
         std::shared_ptr<FcgiReqRes> get() {
             return shared_from_this();
         }
