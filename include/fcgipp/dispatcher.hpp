@@ -16,7 +16,7 @@ namespace fcgipp {
     template<typename Async_t, typename Authenticator_t>
     class UriDispatcher {
     public:
-        UriDispatcher(Async_t &aio, Authenticator_t &auth)
+        UriDispatcher(Async_t &aio, Authenticator_t auth)
             : m_async_scheduler(aio)
             , m_authenticator(auth)
             {}
