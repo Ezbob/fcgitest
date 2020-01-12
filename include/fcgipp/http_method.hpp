@@ -4,46 +4,46 @@
 
 namespace fcgipp {
     enum class HttpMethod {
-        GET,
-        POST,
-        PUT,
-        PATCH,
-        DELETE,
-        OPTIONS,
-        ANY_METHOD,
-        NOT_A_METHOD
+        Get,
+        Post,
+        Put,
+        Patch,
+        Delete,
+        Options,
+        Any_method,
+        Not_a_method
     };
 
     HttpMethod string_to_httpmethod(std::string &&s) {
         if (s == "GET") {
-            return HttpMethod::GET;
+            return HttpMethod::Get;
         } else if (s == "POST") {
-            return HttpMethod::POST;
+            return HttpMethod::Post;
         } else if (s == "PUT") {
-            return HttpMethod::PUT;
+            return HttpMethod::Put;
         } else if (s == "PATCH") {
-            return HttpMethod::PATCH;
+            return HttpMethod::Patch;
         } else if (s == "DELETE") {
-            return HttpMethod::DELETE;
+            return HttpMethod::Delete;
         } else if (s == "OPTIONS") {
-            return HttpMethod::OPTIONS;
+            return HttpMethod::Options;
         } else {
-            return HttpMethod::NOT_A_METHOD;
+            return HttpMethod::Not_a_method;
         }
     }
 
-    std::string httpmethod_to_string(HttpMethod &&m) {
-        if (m == HttpMethod::GET) {
+    std::string httpmethod_to_string(fcgipp::HttpMethod &&m) {
+        if (m == fcgipp::HttpMethod::Get) {
             return "GET";
-        } else if (m == HttpMethod::POST) {
+        } else if (m == fcgipp::HttpMethod::Post) {
             return "POST";
-        } else if (m == HttpMethod::PUT) {
+        } else if (m == fcgipp::HttpMethod::Put) {
             return "PUT";
-        } else if (m == HttpMethod::PATCH) {
+        } else if (m == fcgipp::HttpMethod::Patch) {
             return "PATCH";
-        } else if (m == HttpMethod::DELETE) {
+        } else if (m == fcgipp::HttpMethod::Delete) {
             return "DELETE";
-        } else if (m == HttpMethod::OPTIONS) {
+        } else if (m == fcgipp::HttpMethod::Options) {
             return "OPTIONS";
         } else {
             return "";

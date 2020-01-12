@@ -51,9 +51,9 @@ namespace fcgipp {
                     auto expected_method = it->second->get_method();
                     auto actual_method = string_to_httpmethod(raw_method);
 
-                    if (expected_method == HttpMethod::NOT_A_METHOD) return;
+                    if (expected_method == HttpMethod::Not_a_method) return;
 
-                    if (expected_method == actual_method || expected_method == HttpMethod::ANY_METHOD) {
+                    if (expected_method == actual_method || expected_method == HttpMethod::Any_method) {
                         current_handler = it->second;
                     } else {
                         current_handler = m_handler_404;

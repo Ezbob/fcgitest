@@ -3,7 +3,6 @@
 #define _HEADER_FILE_application_server_20200103163952_
 
 #include "req_res.hpp"
-#include "asio.hpp"
 
 namespace fcgipp {
 

@@ -8,7 +8,7 @@
 namespace fcgipp {
     class DefaultNotFoundHandler : public BasicHandler {
     public:
-        DefaultNotFoundHandler() : BasicHandler(HttpMethod::ANY_METHOD) {}
+        DefaultNotFoundHandler() : BasicHandler(HttpMethod::Any_method) {}
 
         void handle(std::shared_ptr<fcgipp::FcgiReqRes> req) {
             FCGX_PutS(
@@ -27,7 +27,7 @@ namespace fcgipp {
 
     class DefaultUnauthorizedHandler : public BasicHandler {
     public:
-        DefaultUnauthorizedHandler() : BasicHandler(HttpMethod::ANY_METHOD) {}
+        DefaultUnauthorizedHandler() : BasicHandler(HttpMethod::Any_method) {}
 
         void handle(std::shared_ptr<fcgipp::FcgiReqRes> req) {
             FCGX_PutS(
