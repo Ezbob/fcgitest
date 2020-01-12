@@ -85,7 +85,7 @@ int main(void) {
     asio::io_context io;
 
     auto server = fcgipp::make_server(io);
-    auto dispatcher = server.get_dispatcher();
+    auto &dispatcher = server.get_dispatcher();
 
     auto root_handler = fcgipp::make_handler<MyHandler>();
     auto clock_handler = fcgipp::make_handler<MyJsonHandler>();
