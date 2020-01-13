@@ -114,8 +114,8 @@ namespace fcgipp {
         using Entry_t = std::pair<std::set<HttpMethod>, std::shared_ptr<BasicHandler>>;
         std::unordered_map<std::string, Entry_t> m_dispatch_matrix;
 
-        std::shared_ptr<BasicHandler> m_handler_404 = std::shared_ptr<DefaultNotFoundHandler>();
-        std::shared_ptr<BasicHandler> m_handler_401 = std::shared_ptr<DefaultUnauthorizedHandler>();
+        std::shared_ptr<BasicHandler> m_handler_404 = std::shared_ptr<DefaultHttpNotFoundHandler>();
+        std::shared_ptr<BasicHandler> m_handler_401 = std::shared_ptr<DefaultHttpUnauthorizedHandler>();
 
         Async_t &m_async_scheduler;
         BasicAuthenticator &m_authenticator;
