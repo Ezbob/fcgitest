@@ -10,7 +10,6 @@ namespace fcgipp {
         Patch,
         Delete,
         Options,
-        Any_method,
         Not_a_method
     };
 

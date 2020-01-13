@@ -91,8 +91,8 @@ int main(void) {
     auto root_handler = std::shared_ptr<MyHandler>();
     auto clock_handler = std::shared_ptr<MyJsonHandler>();
 
-    dispatcher.add_endpoint("/", root_handler);
-    dispatcher.add_endpoint("/time", clock_handler);
+    dispatcher.add_get("/", root_handler);
+    dispatcher.add_get("/time", clock_handler);
 
     acceptor.schedule_accept();
 

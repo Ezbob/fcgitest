@@ -8,17 +8,9 @@
 
 namespace fcgipp {
 
-    class BasicHandler {
-        HttpMethod m_method;
-    public:
-        BasicHandler(HttpMethod m = HttpMethod::Get) : m_method(m) {}
+    struct BasicHandler {
         ~BasicHandler() = default;
-
         virtual void handle(std::shared_ptr<FcgiReqRes> request) = 0;
-
-        HttpMethod const& get_method() {
-            return m_method;
-        }
     };
 
 };

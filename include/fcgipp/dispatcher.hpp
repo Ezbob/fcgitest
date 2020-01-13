@@ -9,6 +9,7 @@
 #include "fcgiapp.h"
 #include <unordered_map>
 #include <memory>
+#include <set>
 #include <string>
 
 namespace fcgipp {
@@ -49,13 +50,16 @@ namespace fcgipp {
 
                 auto it = m_dispatch_matrix.find(key);
                 if ( it != m_dispatch_matrix.end() ) {
-                    auto expected_method = it->second->get_method();
-                    auto actual_method = string_to_httpmethod(raw_method);
+                    HttpMethod actual_method = string_to_httpmethod(raw_method);
 
-                    if (expected_method == HttpMethod::Not_a_method) return;
+                    if (actual_method == HttpMethod::Not_a_method) return;
 
-                    if (expected_method == actual_method || expected_method == HttpMethod::Any_method) {
-                        current_handler = it->second;
+                    Entry_t const& entry = it->second;
+                    std::set<HttpMethod> const& method_set = entry.first;
+
+                    auto meth_it = method_set.find(actual_method);
+                    if (meth_it != method_set.end()) {
+                        current_handler = entry.second;
                     } else {
                         current_handler = m_handler_404;
                     }
@@ -71,9 +75,31 @@ namespace fcgipp {
             });
         }
 
-        void add_endpoint(std::string uri, std::shared_ptr<BasicHandler> req) {
+        void add_endpoint(std::string uri, HttpMethod meth, std::shared_ptr<BasicHandler> req) {
             add_end_slash(uri);
-            m_dispatch_matrix[uri] = req;
+            auto endpoint_it = m_dispatch_matrix.find(uri);
+            if (endpoint_it == m_dispatch_matrix.end()) {
+                std::set<HttpMethod> m = {meth};
+                Entry_t new_entry = { m, req };
+                m_dispatch_matrix[uri] = new_entry;
+            } else {
+                auto &method_set = endpoint_it->second.first;
+
+                auto method_it = method_set.find(meth);
+                if ( method_it == method_set.end() ) {
+                    method_set.emplace(meth);
+                } else {
+                    throw std::invalid_argument("Endpoint with method already exist");
+                }
+            }
+        }
+
+        void add_get(std::string uri, std::shared_ptr<BasicHandler> req) {
+            add_endpoint(uri, HttpMethod::Get, req);
+        }
+
+        void add_post(std::string uri, std::shared_ptr<BasicHandler> req) {
+            add_endpoint(uri, HttpMethod::Post, req);
         }
 
     private:
@@ -85,7 +111,8 @@ namespace fcgipp {
             }
         }
 
-        std::unordered_map<std::string, std::shared_ptr<BasicHandler>> m_dispatch_matrix;
+        using Entry_t = std::pair<std::set<HttpMethod>, std::shared_ptr<BasicHandler>>;
+        std::unordered_map<std::string, Entry_t> m_dispatch_matrix;
 
         std::shared_ptr<BasicHandler> m_handler_404 = std::shared_ptr<DefaultNotFoundHandler>();
         std::shared_ptr<BasicHandler> m_handler_401 = std::shared_ptr<DefaultUnauthorizedHandler>();

@@ -6,10 +6,7 @@
 #include "fcgiapp.h"
 
 namespace fcgipp {
-    class DefaultNotFoundHandler : public BasicHandler {
-    public:
-        DefaultNotFoundHandler() : BasicHandler(HttpMethod::Any_method) {}
-
+    struct DefaultNotFoundHandler : public BasicHandler {
         void handle(std::shared_ptr<fcgipp::FcgiReqRes> req) {
             FCGX_PutS(
                     "HTTP/1.1 404 Not Found\r\n"
@@ -25,10 +22,7 @@ namespace fcgipp {
         }
     };
 
-    class DefaultUnauthorizedHandler : public BasicHandler {
-    public:
-        DefaultUnauthorizedHandler() : BasicHandler(HttpMethod::Any_method) {}
-
+    struct DefaultUnauthorizedHandler : public BasicHandler {
         void handle(std::shared_ptr<fcgipp::FcgiReqRes> req) {
             FCGX_PutS(
                     "HTTP/1.1 401 Unauthorized\r\n"
