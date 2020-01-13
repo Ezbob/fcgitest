@@ -6,12 +6,10 @@
 #include <memory>
 
 namespace fcgipp {
-
     struct BasicHandler {
         ~BasicHandler() = default;
         virtual void handle(std::shared_ptr<FcgiReqRes> request) = 0;
     };
-
 };
 
 #endif

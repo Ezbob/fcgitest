@@ -13,7 +13,6 @@
 #include <string>
 
 namespace fcgipp {
-
     struct BasicDispatcher {
         virtual ~BasicDispatcher() = default;
         virtual void dispatch(std::shared_ptr<FcgiReqRes> req_ptr) = 0;
