@@ -1,9 +1,11 @@
 
-#ifndef _HEADER_FILE_handlers_20200103235030_
-#define _HEADER_FILE_handlers_20200103235030_
+#ifndef _HEADER_FILE_default_handlers_20200113205909_
+#define _HEADER_FILE_default_handlers_20200113205909_
 
-#include "basic_handler.hpp"
+#include "fcgipp/basic_handler.hpp"
+#include "fcgipp/req_res.hpp"
 #include "fcgiapp.h"
+#include <memory>
 
 namespace fcgipp {
     struct DefaultHttpNotFoundHandler : public BasicHandler {

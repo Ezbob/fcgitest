@@ -3,8 +3,8 @@
 #define _HEADER_FILE_uri_dispatcher_20200103234120_
 
 #include "basic_handler.hpp"
-#include "http_handlers.hpp"
-#include "http_method.hpp"
+#include "fcgipp/http/method.hpp"
+#include "fcgipp/http/default_handlers.hpp"
 #include "authenticator.hpp"
 #include "fcgiapp.h"
 #include <unordered_map>

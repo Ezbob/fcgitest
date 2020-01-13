@@ -1,5 +1,5 @@
-
-#include "fcgipp/handler_response.hpp"
+#include "fcgipp/http/response.hpp"
+#include <string>
 
 using namespace fcgipp;
 
@@ -87,9 +87,4 @@ std::string HttpResponse::render() {
 std::string JsonResponse::render() {
     put_header("Content-Type", "application/json");
     return HttpResponse::render();
-}
-
-std::ostream &operator <<(std::ostream &os, BasicResponse &response) {
-    os << response.render();
-    return os;
 }
