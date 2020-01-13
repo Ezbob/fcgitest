@@ -101,6 +101,22 @@ namespace fcgipp {
             add_endpoint(uri, HttpMethod::Post, req);
         }
 
+        void add_options(std::string uri, std::shared_ptr<BasicHandler> req) {
+            add_endpoint(uri, HttpMethod::Options, req);
+        }
+
+        void add_patch(std::string uri, std::shared_ptr<BasicHandler> req) {
+            add_endpoint(uri, HttpMethod::Patch, req);
+        }
+
+        void add_put(std::string uri, std::shared_ptr<BasicHandler> req) {
+            add_endpoint(uri, HttpMethod::Put, req);
+        }
+
+        void add_delete(std::string uri, std::shared_ptr<BasicHandler> req) {
+            add_endpoint(uri, HttpMethod::Delete, req);
+        }
+
     private:
 
         void add_end_slash(std::string &uri) {
