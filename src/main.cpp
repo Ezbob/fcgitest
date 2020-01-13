@@ -84,16 +84,17 @@ public:
 int main(void) {
     asio::io_context io;
 
-    auto server = fcgipp::make_server(io);
-    auto &dispatcher = server.get_dispatcher();
+    auto authenticator = fcgipp::DefaultAuthenticator();
+    auto dispatcher = fcgipp::DefaultDispatcher<asio::io_context>(io, authenticator);
+    auto acceptor = fcgipp::FcgiAcceptor<asio::io_context>(io, dispatcher);
 
-    auto root_handler = fcgipp::make_handler<MyHandler>();
-    auto clock_handler = fcgipp::make_handler<MyJsonHandler>();
+    auto root_handler = std::shared_ptr<MyHandler>();
+    auto clock_handler = std::shared_ptr<MyJsonHandler>();
 
     dispatcher.add_endpoint("/", root_handler);
     dispatcher.add_endpoint("/time", clock_handler);
 
-    io.post(server);
+    acceptor.schedule_accept();
 
     io.run();
 

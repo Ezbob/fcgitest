@@ -21,11 +21,6 @@ namespace fcgipp {
         }
     };
 
-    template<typename Derived_t, typename... Arg_t>
-    std::shared_ptr<BasicHandler> make_handler(Arg_t... args) {
-        return std::make_shared<Derived_t>(args...);
-    }
-
 };
 
 #endif

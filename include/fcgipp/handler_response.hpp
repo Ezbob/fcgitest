@@ -8,8 +8,8 @@
 
 namespace fcgipp {
 
-    class BasicResponse {
-    public:
+    struct BasicResponse {
+        virtual ~BasicResponse() = default;
         virtual std::string render() = 0;
     };
 

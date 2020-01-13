@@ -13,16 +13,17 @@
 
 namespace fcgipp {
 
-    template<typename Async_t, typename Authenticator_t = DefaultAuthenticator>
-    class DefaultDispatcher {
+    struct BasicDispatcher {
+        virtual ~BasicDispatcher() = default;
+        virtual void dispatch(std::shared_ptr<FcgiReqRes> req_ptr) = 0;
+    };
+
+    template<typename Async_t>
+    class DefaultDispatcher : public BasicDispatcher {
     public:
-        DefaultDispatcher(Async_t &aio, Authenticator_t auth)
+        DefaultDispatcher(Async_t &aio, BasicAuthenticator &auth)
             : m_async_scheduler(aio)
             , m_authenticator(auth) {}
-
-        DefaultDispatcher(Async_t &aio)
-            : m_async_scheduler(aio)
-            , m_authenticator(Authenticator_t()) {}
 
         ~DefaultDispatcher() = default;
 
@@ -86,11 +87,11 @@ namespace fcgipp {
 
         std::unordered_map<std::string, std::shared_ptr<BasicHandler>> m_dispatch_matrix;
 
-        std::shared_ptr<BasicHandler> m_handler_404 = make_handler<DefaultNotFoundHandler>();
-        std::shared_ptr<BasicHandler> m_handler_401 = make_handler<DefaultUnauthorizedHandler>();
+        std::shared_ptr<BasicHandler> m_handler_404 = std::shared_ptr<DefaultNotFoundHandler>();
+        std::shared_ptr<BasicHandler> m_handler_401 = std::shared_ptr<DefaultUnauthorizedHandler>();
 
         Async_t &m_async_scheduler;
-        Authenticator_t m_authenticator;
+        BasicAuthenticator &m_authenticator;
     };
 };
 
