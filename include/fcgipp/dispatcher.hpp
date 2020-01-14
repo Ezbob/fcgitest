@@ -78,11 +78,10 @@ namespace fcgipp {
             add_end_slash(uri);
             auto endpoint_it = m_dispatch_matrix.find(uri);
             if (endpoint_it == m_dispatch_matrix.end()) {
-                std::set<HttpMethod> m = {meth};
-                Entry_t new_entry = { m, req };
-                m_dispatch_matrix[uri] = new_entry;
+                std::set<HttpMethod> ms = { meth };
+                m_dispatch_matrix.emplace(std::make_pair(uri, std::make_pair(ms, req)));
             } else {
-                auto &method_set = endpoint_it->second.first;
+                std::set<HttpMethod> &method_set = endpoint_it->second.first;
 
                 auto method_it = method_set.find(meth);
                 if ( method_it == method_set.end() ) {
