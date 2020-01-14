@@ -26,13 +26,12 @@ void DefaultDispatcher::dispatch(std::shared_ptr<FcgiReqRes> req_ptr) {
         auto it = m_dispatch_matrix.find(key);
         if ( it != m_dispatch_matrix.end() ) {
             HttpMethod actual_method = string_to_httpmethod(raw_method);
-
             if (actual_method == HttpMethod::Not_a_method) return;
 
-            DefaultDispatcher::HandlerEntry &entry = it->second;
+            auto entry = it->second;
 
-            if (entry.is_accepted_method(actual_method)) {
-                current_handler = entry.handler;
+            if (entry->is_accepted_method(actual_method)) {
+                current_handler = entry->get_handler();
             } else {
                 current_handler = m_handler_404;
             }
@@ -52,16 +51,13 @@ void DefaultDispatcher::add_endpoint(std::string uri, HttpMethod meth, std::shar
     add_end_slash(uri);
     auto endpoint_it = m_dispatch_matrix.find(uri);
     if (endpoint_it == m_dispatch_matrix.end()) {
-        DefaultDispatcher::HandlerEntry new_entry = {
-            { meth },
-            handler
-        };
+        auto new_entry = std::make_shared<HandlerEntry>(meth, handler);
         m_dispatch_matrix.emplace(std::make_pair(uri, new_entry));
     } else {
-        DefaultDispatcher::HandlerEntry &entry = endpoint_it->second;
+        auto entry = endpoint_it->second;
 
-        if ( !entry.is_accepted_method(meth) ) {
-            entry.add_accepted_method(meth);
+        if ( !entry->is_accepted_method(meth) ) {
+            entry->add_accepted_method(meth);
         } else {
             throw std::invalid_argument("Endpoint with method already exist");
         }

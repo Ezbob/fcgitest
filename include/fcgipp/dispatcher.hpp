@@ -64,9 +64,13 @@ namespace fcgipp {
             }
         }
 
-        struct HandlerEntry {
+        class HandlerEntry {
             std::set<HttpMethod> accepted_methods;
             std::shared_ptr<BasicHandler> handler;
+        public:
+            HandlerEntry(HttpMethod meth, std::shared_ptr<BasicHandler> h)
+                : accepted_methods{meth}
+                , handler(h) {}
 
             bool is_accepted_method(HttpMethod const& meth) {
                 return accepted_methods.find(meth) != accepted_methods.end();
@@ -75,9 +79,13 @@ namespace fcgipp {
             void add_accepted_method(HttpMethod meth) {
                 accepted_methods.emplace(meth);
             }
+
+            std::shared_ptr<BasicHandler> get_handler() {
+                return handler;
+            }
         };
 
-        std::unordered_map<std::string, HandlerEntry> m_dispatch_matrix;
+        std::unordered_map<std::string, std::shared_ptr<HandlerEntry>> m_dispatch_matrix;
 
         std::shared_ptr<BasicHandler> m_handler_404 = std::shared_ptr<DefaultHttpNotFoundHandler>();
         std::shared_ptr<BasicHandler> m_handler_401 = std::shared_ptr<DefaultHttpUnauthorizedHandler>();
