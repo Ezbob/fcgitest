@@ -4,13 +4,13 @@
 
 #include "req_res.hpp"
 #include "fcgiapp.h"
+#include "asio.hpp"
 #include "dispatcher.hpp"
 
 namespace fcgipp {
 
-    template<typename Async_t>
     class FcgiAcceptor {
-        Async_t &m_async_scheduler;
+        asio::io_context &m_async_scheduler;
         BasicDispatcher &m_dispatcher;
 
         void accept() {
@@ -24,7 +24,7 @@ namespace fcgipp {
         }
 
     public:
-        FcgiAcceptor(Async_t &async_scheduler, BasicDispatcher &dispatch)
+        FcgiAcceptor(asio::io_context &async_scheduler, BasicDispatcher &dispatch)
             : m_async_scheduler(async_scheduler)
             , m_dispatcher(dispatch) {
             FCGX_Init();

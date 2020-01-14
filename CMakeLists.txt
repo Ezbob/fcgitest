@@ -39,6 +39,7 @@ SET(EXEC_NAME "${PROJECT_NAME}")
 SET(SOURCES
     "${SOURCES_PREFIX}/main.cpp"
     "${SOURCES_PREFIX}/fcgipp/req_res.cpp"
+    "${SOURCES_PREFIX}/fcgipp/dispatcher.cpp"
     "${SOURCES_PREFIX}/fcgipp/http/method.cpp"
     "${SOURCES_PREFIX}/fcgipp/http/response.cpp"
     "${SOURCES_PREFIX}/fcgipp_shims/json11_shim.cpp"

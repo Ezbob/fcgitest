@@ -85,8 +85,8 @@ int main(void) {
     asio::io_context io;
 
     auto authenticator = fcgipp::DefaultAuthenticator();
-    auto dispatcher = fcgipp::DefaultDispatcher<asio::io_context>(io, authenticator);
-    auto acceptor = fcgipp::FcgiAcceptor<asio::io_context>(io, dispatcher);
+    auto dispatcher = fcgipp::DefaultDispatcher(io, authenticator);
+    auto acceptor = fcgipp::FcgiAcceptor(io, dispatcher);
 
     auto root_handler = std::shared_ptr<MyHandler>();
     auto clock_handler = std::shared_ptr<MyJsonHandler>();
