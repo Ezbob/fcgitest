@@ -30,7 +30,7 @@ std::string HttpResponse::translate_code() {
         case 308: return "Permanent Redirect";
         case 400: return "Bad Request";
         case 401: return "Unauthorized";
-        case 402: return "Payment Requried";
+        case 402: return "Payment Required";
         case 403: return "Forbidden";
         case 404: return "Not Found";
         case 405: return "Method Not Allowed";

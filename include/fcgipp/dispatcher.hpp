@@ -2,9 +2,9 @@
 #ifndef _HEADER_FILE_uri_dispatcher_20200103234120_
 #define _HEADER_FILE_uri_dispatcher_20200103234120_
 
-#include "basic_handler.hpp"
 #include "fcgipp/http/method.hpp"
 #include "fcgipp/http/default_handlers.hpp"
+#include "basic_dispatcher.hpp"
 #include "authenticator.hpp"
 #include "fcgiapp.h"
 #include "asio.hpp"
@@ -14,20 +14,13 @@
 #include <string>
 
 namespace fcgipp {
-    struct BasicDispatcher {
-        virtual ~BasicDispatcher() = default;
-        virtual void dispatch(std::shared_ptr<FcgiReqRes> req_ptr) = 0;
-    };
 
     class DefaultDispatcher : public BasicDispatcher {
     public:
-        DefaultDispatcher(asio::io_context &aio, BasicAuthenticator &auth)
-            : m_async_scheduler(aio)
-            , m_authenticator(auth) {}
-
+        DefaultDispatcher(BasicAuthenticator &auth) : m_authenticator(auth) {}
         ~DefaultDispatcher() = default;
 
-        void dispatch(std::shared_ptr<FcgiReqRes> req_ptr) override;
+        std::shared_ptr<BasicHandler> dispatch(std::shared_ptr<FcgiReqRes> req_ptr) override;
 
         void add_endpoint(std::string uri, HttpMethod, std::shared_ptr<BasicHandler>);
 
@@ -64,33 +57,14 @@ namespace fcgipp {
             }
         }
 
-        class HandlerEntry {
-            std::set<HttpMethod> accepted_methods;
-            std::shared_ptr<BasicHandler> handler;
-        public:
-            HandlerEntry(HttpMethod meth, std::shared_ptr<BasicHandler> h)
-                : accepted_methods{meth}
-                , handler(h) {}
+        using HandlerMap_t = std::unordered_map<HttpMethod, std::shared_ptr<BasicHandler>>;
+        std::unordered_map<std::string, HandlerMap_t> m_dispatch_matrix;
 
-            bool is_accepted_method(HttpMethod const& meth) {
-                return accepted_methods.find(meth) != accepted_methods.end();
-            }
+        std::shared_ptr<BasicHandler> m_handler_500 = std::make_shared<DefaultHttpInternalServerErrorHandler>();
+        std::shared_ptr<BasicHandler> m_handler_404 = std::make_shared<DefaultHttpNotFoundHandler>();
+        std::shared_ptr<BasicHandler> m_handler_401 = std::make_shared<DefaultHttpUnauthorizedHandler>();
+        std::shared_ptr<BasicHandler> m_handler_405 = std::make_shared<DefaultHttpMethodNotAllowedHandler>();
 
-            void add_accepted_method(HttpMethod meth) {
-                accepted_methods.emplace(meth);
-            }
-
-            std::shared_ptr<BasicHandler> get_handler() {
-                return handler;
-            }
-        };
-
-        std::unordered_map<std::string, std::shared_ptr<HandlerEntry>> m_dispatch_matrix;
-
-        std::shared_ptr<BasicHandler> m_handler_404 = std::shared_ptr<DefaultHttpNotFoundHandler>();
-        std::shared_ptr<BasicHandler> m_handler_401 = std::shared_ptr<DefaultHttpUnauthorizedHandler>();
-
-        asio::io_context &m_async_scheduler;
         BasicAuthenticator &m_authenticator;
     };
 };

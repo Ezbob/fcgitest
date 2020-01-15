@@ -6,7 +6,7 @@
 #include <iostream>
 #include <memory>
 #include <cstring>
-#include "handler_response.hpp"
+#include "basic_response.hpp"
 #include "fcgiapp.h"
 
 namespace fcgipp {

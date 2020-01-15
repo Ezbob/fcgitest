@@ -38,7 +38,7 @@ SET(EXEC_NAME "${PROJECT_NAME}")
 # Next steps:
 SET(SOURCES
     "${SOURCES_PREFIX}/main.cpp"
-    "${SOURCES_PREFIX}/fcgipp/req_res.cpp"
+    "${SOURCES_PREFIX}/fcgipp/fcgi_req_res.cpp"
     "${SOURCES_PREFIX}/fcgipp/dispatcher.cpp"
     "${SOURCES_PREFIX}/fcgipp/http/method.cpp"
     "${SOURCES_PREFIX}/fcgipp/http/response.cpp"

@@ -5,13 +5,13 @@
 #include <string>
 #include <sstream>
 #include <ostream>
-#include "fcgipp/handler_response.hpp"
+#include "fcgipp/basic_response.hpp"
 
 namespace fcgipp {
 
     static const std::string HTTP_LINE_END = "\r\n";
 
-    class HttpResponse : public fcgipp::BasicResponse {
+    class HttpResponse : public BasicResponse {
     protected:
         std::stringstream m_header;
         std::stringstream m_body;

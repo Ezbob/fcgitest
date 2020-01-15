@@ -2,7 +2,8 @@
 #ifndef _HEADER_FILE_application_server_20200103163952_
 #define _HEADER_FILE_application_server_20200103163952_
 
-#include "req_res.hpp"
+#include <memory>
+#include "fcgi_req_res.hpp"
 #include "fcgiapp.h"
 #include "asio.hpp"
 #include "dispatcher.hpp"
@@ -13,16 +14,6 @@ namespace fcgipp {
         asio::io_context &m_async_scheduler;
         BasicDispatcher &m_dispatcher;
 
-        void accept() {
-            auto request = FcgiReqRes::create();
-
-            if ( request->accept() ) {
-                m_dispatcher.dispatch(request);
-
-                schedule_accept();
-            }
-        }
-
     public:
         FcgiAcceptor(asio::io_context &async_scheduler, BasicDispatcher &dispatch)
             : m_async_scheduler(async_scheduler)
@@ -31,10 +22,19 @@ namespace fcgipp {
         }
 
         void schedule_accept() {
-            m_async_scheduler.post([this] {
-                accept();
-            });
+            while (true) {
+                auto request = std::make_shared<FcgiReqRes>();
+
+                if ( request->accept() ) {
+                    auto handler = m_dispatcher.dispatch(request);
+
+                    m_async_scheduler.post([handler, request] {
+                        handler->handle(request);
+                    });
+                }
+            }
         }
+
     };
 };
 

@@ -1,4 +1,4 @@
-#include "fcgipp/req_res.hpp"
+#include "fcgipp/fcgi_req_res.hpp"
 
 using namespace fcgipp;
 
