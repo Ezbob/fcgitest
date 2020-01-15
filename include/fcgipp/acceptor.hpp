@@ -21,7 +21,7 @@ namespace fcgipp {
             FCGX_Init();
         }
 
-        void schedule_accept() {
+        void start_accepting() {
             while (true) {
                 auto request = std::make_shared<FcgiReqRes>();
 

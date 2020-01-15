@@ -11,6 +11,7 @@ extern char ** environ;
 #include "fcgipp_shims/json11_shim.hpp"
 #include "json11.hpp"
 
+#include <thread>
 #include <sstream>
 #include <chrono>
 #include <iomanip>
@@ -83,6 +84,7 @@ public:
 
 int main(void) {
     asio::io_context io;
+    asio::io_context::work work_io(io);
 
     fcgipp::DefaultAuthenticator authenticator;
     fcgipp::DefaultDispatcher dispatcher(authenticator);
@@ -94,8 +96,14 @@ int main(void) {
     dispatcher.add_get("/", root_handler);
     dispatcher.add_get("/time", clock_handler);
 
-    acceptor.schedule_accept();
+    std::thread accepting_thread([&acceptor] {
+        /*
+         *  Acceptor is running in it's own thread
+         */
+        acceptor.start_accepting();
+    });
 
+    // handler is running on the first thread
     io.run();
 
     return 0;
