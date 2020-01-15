@@ -7,9 +7,11 @@
 #include <memory>
 #include <cstring>
 #include "basic_response.hpp"
+#include "basic_request_response.hpp"
 #include "fcgiapp.h"
 
 namespace fcgipp {
+
     /**
      * C++11 shared_ptr wrapper for FCGI requests.
      *
@@ -19,7 +21,7 @@ namespace fcgipp {
      *
      * When the reference count reaches zero, the request is finished if it has been accepted.
      */
-    class FcgiReqRes : std::enable_shared_from_this<FcgiReqRes> {
+    class FcgiReqRes : public BasicRequestResponse, public std::enable_shared_from_this<FcgiReqRes> {
         FCGX_Request m_request;
         bool m_is_accepted;
 
@@ -82,6 +84,7 @@ namespace fcgipp {
             return shared_from_this();
         }
     };
+
 };
 
 #endif
