@@ -68,12 +68,8 @@ namespace fcgipp {
             return FCGX_PutStr(r.c_str(), r.size(), m_request.out);
         }
 
-        int answerWith(std::string &res) {
+        int answerWith(std::string const &res) {
             return FCGX_PutStr(res.c_str(), res.size(), m_request.out);
-        }
-
-        int answerWith(const char *res) {
-            return FCGX_PutStr(res, std::strlen(res), m_request.out);
         }
 
         int log(std::string &res) {
