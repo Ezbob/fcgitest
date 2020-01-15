@@ -6,6 +6,7 @@
 #include <iostream>
 #include <memory>
 #include <cstring>
+#include <vector>
 #include "basic_response.hpp"
 #include "basic_request_response.hpp"
 #include "fcgiapp.h"
@@ -21,22 +22,21 @@ namespace fcgipp {
      *
      * When the reference count reaches zero, the request is finished if it has been accepted.
      */
-    class FcgiReqRes : public BasicRequestResponse, public std::enable_shared_from_this<FcgiReqRes> {
+    class FcgiRequestResponse : public BasicRequestResponse, 
+                                public std::enable_shared_from_this<FcgiRequestResponse> {
         FCGX_Request m_request;
         bool m_is_accepted;
 
     public:
-        FcgiReqRes() : m_is_accepted(false) {
+        FcgiRequestResponse() : m_is_accepted(false) {
             FCGX_InitRequest(&m_request, 0, 0);
         }
 
-        ~FcgiReqRes() {
+        ~FcgiRequestResponse() {
             if (m_is_accepted) {
                 FCGX_Finish_r(&m_request);
             }
         }
-
-        static std::shared_ptr<FcgiReqRes> create();
 
         bool accept() {
             m_is_accepted = (FCGX_Accept_r(&m_request) == 0);
@@ -76,7 +76,18 @@ namespace fcgipp {
             return FCGX_PutStr(res.c_str(), res.size(), m_request.err);
         }
 
-        std::shared_ptr<FcgiReqRes> get() {
+        char const *getParameter(std::string const &name) const {
+            return FCGX_GetParam(name.c_str(), m_request.envp);
+        }
+
+        const std::vector<const char *> getParameters() const {
+            std::vector<const char *> res;
+            for (size_t i = 0; m_request.envp[i] != nullptr; ++i) 
+                res.push_back(m_request.envp[i]);
+            return res;
+        }
+
+        std::shared_ptr<FcgiRequestResponse> get() {
             return shared_from_this();
         }
     };

@@ -20,7 +20,6 @@ namespace fcgipp {
         std::string translate_code();
 
     public:
-
         void put_header(std::string const& raw) {
             m_header << (raw + HTTP_LINE_END);
         }

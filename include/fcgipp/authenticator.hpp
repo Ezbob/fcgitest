@@ -4,7 +4,7 @@
 #define _HEADER_FILE_authenticator_20200103164302_
 
 #include "basic_authenticator.hpp"
-#include "fcgi_req_res.hpp"
+#include "basic_request_response.hpp"
 #include <memory>
 
 namespace fcgipp {
@@ -13,7 +13,7 @@ namespace fcgipp {
     public:
         ~DefaultAuthenticator() = default;
 
-        bool is_valid(std::shared_ptr<FcgiReqRes> const &) {
+        bool is_valid(std::shared_ptr<BasicRequestResponse> const &) {
             return true;
         }
     };

@@ -27,12 +27,22 @@ static void penv(const char * const * envp, std::ostream &stream)
     stream << "</pre>";
 }
 
+static void penv(const std::vector<const char *> &envp, std::ostream &stream)
+{
+    stream << "<pre>" << fcgipp::HTTP_LINE_END;
+    for ( auto c : envp )
+    {
+        stream << c << fcgipp::HTTP_LINE_END;
+    }
+    stream << "</pre>";
+}
+
 static long g_pid = getpid();
 static int g_count = 0;
 
 class MyHandler : public fcgipp::BasicHandler {
 public:
-    void handle(std::shared_ptr<fcgipp::FcgiReqRes> fcgir) {
+    void handle(std::shared_ptr<fcgipp::BasicRequestResponse> rr) {
         fcgipp::HttpResponse resp;
         std::ostream &out = resp.body();
 
@@ -53,18 +63,20 @@ public:
         penv(environ, out);
 
         out <<  "<h4>Fcgi Environment</h4>";
-        penv(fcgir->envp(), out);
+
+        auto parameters = rr->getParameters();
+        penv(parameters, out);
 
         out << "</body>"
                "</html>";
 
-        fcgir->answerWith(resp);
+        rr->answerWith(resp);
     }
 };
 
 class MyJsonHandler : public fcgipp::BasicHandler {
 public:
-    void handle(std::shared_ptr<fcgipp::FcgiReqRes> fcgir) {
+    void handle(std::shared_ptr<fcgipp::BasicRequestResponse> rr) {
         fcgipp::JsonResponse resp;
 
         auto t = std::time(nullptr);
@@ -77,7 +89,7 @@ public:
 
         resp.body() << j;
 
-        fcgir->answerWith(resp);
+        rr->answerWith(resp);
     }
 };
 

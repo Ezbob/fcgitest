@@ -5,6 +5,7 @@
 #include "fcgipp/http/method.hpp"
 #include "fcgipp/http/default_handlers.hpp"
 #include "basic_dispatcher.hpp"
+#include "basic_request_response.hpp"
 #include "authenticator.hpp"
 #include "fcgiapp.h"
 #include "asio.hpp"
@@ -20,7 +21,7 @@ namespace fcgipp {
         DefaultDispatcher(BasicAuthenticator &auth) : m_authenticator(auth) {}
         ~DefaultDispatcher() = default;
 
-        std::shared_ptr<BasicHandler> dispatch(std::shared_ptr<FcgiReqRes> req_ptr) override;
+        std::shared_ptr<BasicHandler> dispatch(std::shared_ptr<BasicRequestResponse> req_ptr) override;
 
         void add_endpoint(std::string uri, HttpMethod, std::shared_ptr<BasicHandler>);
 

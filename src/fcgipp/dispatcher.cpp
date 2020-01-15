@@ -3,18 +3,18 @@
 
 using namespace fcgipp;
 
-std::shared_ptr<BasicHandler> DefaultDispatcher::dispatch(std::shared_ptr<FcgiReqRes> req_ptr) {
+std::shared_ptr<BasicHandler> DefaultDispatcher::dispatch(std::shared_ptr<BasicRequestResponse> req_ptr) {
     std::shared_ptr<BasicHandler> current_handler;
 
     if ( m_authenticator.is_valid(req_ptr) ) {
-        auto raw_method = FCGX_GetParam("REQUEST_METHOD", req_ptr->envp());
+        auto raw_method = req_ptr->getParameter("REQUEST_METHOD");
 
         if (!raw_method) {
             return m_handler_500;
         }
 
         std::string key;
-        auto uri = FCGX_GetParam("PATH_INFO", req_ptr->envp());
+        auto uri = req_ptr->getParameter("PATH_INFO");
 
         if (uri) {
             key = uri;

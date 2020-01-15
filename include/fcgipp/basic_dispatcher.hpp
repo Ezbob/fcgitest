@@ -4,13 +4,13 @@
 
 #include <memory>
 #include "basic_handler.hpp"
-#include "fcgi_req_res.hpp"
+#include "basic_request_response.hpp"
 
 namespace fcgipp {
 
     struct BasicDispatcher {
         virtual ~BasicDispatcher() = default;
-        virtual std::shared_ptr<BasicHandler> dispatch(std::shared_ptr<FcgiReqRes> req_ptr) = 0;
+        virtual std::shared_ptr<BasicHandler> dispatch(std::shared_ptr<BasicRequestResponse> req_ptr) = 0;
     };
 
 };

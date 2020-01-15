@@ -3,7 +3,7 @@
 #define _HEADER_FILE_application_server_20200103163952_
 
 #include <memory>
-#include "fcgi_req_res.hpp"
+#include "fcgi_request_response.hpp"
 #include "fcgiapp.h"
 #include "asio.hpp"
 #include "dispatcher.hpp"
@@ -23,7 +23,7 @@ namespace fcgipp {
 
         void start_accepting() {
             while (true) {
-                auto request = std::make_shared<FcgiReqRes>();
+                auto request = std::make_shared<FcgiRequestResponse>();
 
                 if ( request->accept() ) {
                     auto handler = m_dispatcher.dispatch(request);
