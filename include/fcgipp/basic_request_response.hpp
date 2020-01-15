@@ -7,8 +7,11 @@
 namespace fcgipp {
 
     struct BasicRequestResponse {
+        virtual ~BasicRequestResponse() = default;
         virtual bool accept() = 0;
+        virtual bool is_accepted() = 0;
         virtual int answerWith(BasicResponse &) = 0;
+        virtual int answerWith(std::string const&) = 0;
     };
 
 };

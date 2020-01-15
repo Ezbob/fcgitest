@@ -3,7 +3,7 @@
 #define _HEADER_FILE_basic_authenticator_20200115204611_
 
 #include <memory>
-#include "fcgi_req_res.hpp"
+#include "fcgi_request_response.hpp"
 
 namespace fcgipp {
 
