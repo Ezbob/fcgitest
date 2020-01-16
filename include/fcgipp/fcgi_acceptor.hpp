@@ -3,13 +3,14 @@
 #define _HEADER_FILE_application_server_20200103163952_
 
 #include <memory>
+#include "basic_acceptor.hpp"
 #include "fcgi_server_request_response.hpp"
 #include "default_dispatcher.hpp"
 #include "fcgiapp.h"
 
 namespace fcgipp {
 
-    class FcgiAcceptor {
+    class FcgiAcceptor : public BasicAcceptor {
         BasicDispatcher &m_dispatcher;
 
     public:
@@ -18,7 +19,7 @@ namespace fcgipp {
             FCGX_Init();
         }
 
-        void start_accepting() {
+        void start_accepting() override {
             while (true) {
                 auto request = std::make_shared<FcgiServerRequestResponse>();
 

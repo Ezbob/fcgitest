@@ -100,9 +100,9 @@ int main(void) {
     asio::io_context io;
     asio::io_context::work work_io(io);
 
-    fcgipp::AsioMultiplexer multiplexer(io);
-    fcgipp::DefaultAuthenticator authenticator;
-    fcgipp::DefaultDispatcher dispatcher(authenticator, multiplexer);
+    fcgipp::DefaultAuthenticator auth;
+    fcgipp::AsioMultiplexer multiplex(io);
+    fcgipp::DefaultDispatcher dispatcher(auth, multiplex);
     fcgipp::FcgiAcceptor acceptor(dispatcher);
 
     auto root_handler = std::make_shared<MyHandler>();

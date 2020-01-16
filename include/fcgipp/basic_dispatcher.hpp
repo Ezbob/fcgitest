@@ -3,6 +3,8 @@
 #define _HEADER_FILE_basic_dispatcher_20200115194648_
 
 #include <memory>
+#include <string>
+#include "fcgipp/http/method.hpp"
 #include "basic_handler.hpp"
 #include "basic_server_request_response.hpp"
 
@@ -11,6 +13,7 @@ namespace fcgipp {
     struct BasicDispatcher {
         virtual ~BasicDispatcher() = default;
         virtual void dispatch(std::shared_ptr<BasicServerRequestResponse> req_ptr) = 0;
+        virtual void add_endpoint(std::string, HttpMethod, std::shared_ptr<BasicHandler>) = 0;
     };
 
 };
