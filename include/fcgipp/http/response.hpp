@@ -43,7 +43,7 @@ namespace fcgipp {
         std::string render() override;
     };
 
-    class JsonResponse : public HttpResponse {
+    struct JsonResponse : public HttpResponse {
         std::string render() override;
     };
 

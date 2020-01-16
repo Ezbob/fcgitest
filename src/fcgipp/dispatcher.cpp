@@ -4,7 +4,7 @@
 using namespace fcgipp;
 
 std::shared_ptr<BasicHandler> DefaultDispatcher::select(std::shared_ptr<BasicRequestResponse> req_res_ptr) const {
-    auto raw_method = req_res_ptr->getParameter("REQUEST_METHOD");
+    auto raw_method = req_res_ptr->get_parameter("REQUEST_METHOD");
 
     if ( !raw_method ) {
         return m_handler_500;
@@ -14,7 +14,7 @@ std::shared_ptr<BasicHandler> DefaultDispatcher::select(std::shared_ptr<BasicReq
         return m_handler_401;
     }
 
-    auto key = build_uri(req_res_ptr->getParameter("PATH_INFO"));
+    auto key = build_uri(req_res_ptr->get_parameter("PATH_INFO"));
 
     auto it = m_dispatch_matrix.find(key);
     if ( it == m_dispatch_matrix.end() ) {
@@ -57,7 +57,7 @@ void DefaultDispatcher::add_end_slash(std::string &uri) const {
 void DefaultDispatcher::dispatch(std::shared_ptr<BasicRequestResponse> req_ptr) {
     std::shared_ptr<BasicHandler> current_handler = select(req_ptr);
 
-    m_scheduler.post([current_handler, req_ptr] {
+    m_scheduler.schedule_task([current_handler, req_ptr] {
         current_handler->handle(req_ptr);
     });
 }

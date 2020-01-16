@@ -6,19 +6,17 @@
 #include "fcgipp/http/default_handlers.hpp"
 #include "basic_dispatcher.hpp"
 #include "basic_request_response.hpp"
-#include "authenticator.hpp"
-#include "fcgiapp.h"
-#include "asio.hpp"
+#include "basic_authenticator.hpp"
+#include "basic_multiplexer.hpp"
 #include <unordered_map>
 #include <memory>
-#include <set>
 #include <string>
 
 namespace fcgipp {
 
     class DefaultDispatcher : public BasicDispatcher {
     public:
-        DefaultDispatcher(BasicAuthenticator &auth, asio::io_context &sch) 
+        DefaultDispatcher(BasicAuthenticator &auth, BasicMultiplexer &sch) 
             : m_authenticator(auth)
             , m_scheduler(sch) {}
 
@@ -69,7 +67,7 @@ namespace fcgipp {
         std::shared_ptr<BasicHandler> m_handler_405 = std::make_shared<DefaultHttpMethodNotAllowedHandler>();
 
         BasicAuthenticator &m_authenticator;
-        asio::io_context &m_scheduler;
+        BasicMultiplexer &m_scheduler;
     };
 };
 

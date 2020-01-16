@@ -9,6 +9,7 @@ extern char ** environ;
 #include "asio.hpp"
 #include "fcgipp/fcgi.hpp"
 #include "fcgipp_shims/json11_shim.hpp"
+#include "fcgipp_shims/asio_multiplexer.hpp"
 #include "json11.hpp"
 
 #include <thread>
@@ -65,7 +66,7 @@ public:
 
         out <<  "<h4>Fcgi Environment</h4>";
 
-        auto parameters = rr->getParameters();
+        auto parameters = rr->get_parameters();
         penv(parameters, out);
 
         out << "</body>"
@@ -99,8 +100,9 @@ int main(void) {
     asio::io_context io;
     asio::io_context::work work_io(io);
 
+    fcgipp::AsioMultiplexer multiplexer(io);
     fcgipp::DefaultAuthenticator authenticator;
-    fcgipp::DefaultDispatcher dispatcher(authenticator, io);
+    fcgipp::DefaultDispatcher dispatcher(authenticator, multiplexer);
     fcgipp::FcgiAcceptor acceptor(dispatcher);
 
     auto root_handler = std::make_shared<MyHandler>();

@@ -47,22 +47,6 @@ namespace fcgipp {
             return m_is_accepted;
         }
 
-        FCGX_Stream *out_raw() {
-            return m_request.out;
-        }
-
-        FCGX_Stream *err_raw() {
-            return m_request.err;
-        }
-
-        FCGX_Stream *in_raw() {
-            return m_request.in;
-        }
-
-        char **envp() {
-            return m_request.envp;
-        }
-
         int answerWith(BasicResponse &res) {
             auto r = res.render();
             return FCGX_PutStr(r.c_str(), r.size(), m_request.out);
@@ -76,11 +60,11 @@ namespace fcgipp {
             return FCGX_PutStr(res.c_str(), res.size(), m_request.err);
         }
 
-        char const *getParameter(std::string const &name) const {
+        char const *get_parameter(std::string const &name) const override {
             return FCGX_GetParam(name.c_str(), m_request.envp);
         }
 
-        const std::vector<const char *> getParameters() const {
+        const std::vector<const char *> get_parameters() const override {
             std::vector<const char *> res;
             for (size_t i = 0; m_request.envp[i] != nullptr; ++i) 
                 res.push_back(m_request.envp[i]);

@@ -7,3 +7,4 @@
 #include "fcgipp/http/response.hpp"
 #include "fcgi_request_response.hpp"
 #include "acceptor.hpp"
+#include "basic_multiplexer.hpp"
