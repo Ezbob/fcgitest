@@ -8,7 +8,7 @@
 #include <cstring>
 #include <vector>
 #include "basic_response.hpp"
-#include "basic_request_response.hpp"
+#include "basic_server_request_response.hpp"
 #include "fcgiapp.h"
 
 namespace fcgipp {
@@ -22,7 +22,7 @@ namespace fcgipp {
      *
      * When the reference count reaches zero, the request is finished if it has been accepted.
      */
-    class FcgiServerRequestResponse : public BasicRequestResponse, 
+    class FcgiServerRequestResponse : public BasicServerRequestResponse, 
                                 public std::enable_shared_from_this<FcgiServerRequestResponse> {
         FCGX_Request m_request;
         bool m_is_accepted;

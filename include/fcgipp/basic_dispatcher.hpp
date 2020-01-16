@@ -4,13 +4,13 @@
 
 #include <memory>
 #include "basic_handler.hpp"
-#include "basic_request_response.hpp"
+#include "basic_server_request_response.hpp"
 
 namespace fcgipp {
 
     struct BasicDispatcher {
         virtual ~BasicDispatcher() = default;
-        virtual void dispatch(std::shared_ptr<BasicRequestResponse> req_ptr) = 0;
+        virtual void dispatch(std::shared_ptr<BasicServerRequestResponse> req_ptr) = 0;
     };
 
 };

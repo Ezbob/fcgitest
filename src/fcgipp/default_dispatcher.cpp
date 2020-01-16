@@ -3,7 +3,7 @@
 
 using namespace fcgipp;
 
-std::shared_ptr<BasicHandler> DefaultDispatcher::select(std::shared_ptr<BasicRequestResponse> req_res_ptr) const {
+std::shared_ptr<BasicHandler> DefaultDispatcher::select(std::shared_ptr<BasicServerRequestResponse> req_res_ptr) const {
     auto raw_method = req_res_ptr->get_parameter("REQUEST_METHOD");
 
     if ( !raw_method ) {
@@ -54,7 +54,7 @@ void DefaultDispatcher::add_end_slash(std::string &uri) const {
     }
 }
 
-void DefaultDispatcher::dispatch(std::shared_ptr<BasicRequestResponse> req_ptr) {
+void DefaultDispatcher::dispatch(std::shared_ptr<BasicServerRequestResponse> req_ptr) {
     std::shared_ptr<BasicHandler> current_handler = select(req_ptr);
 
     m_scheduler.schedule_task([current_handler, req_ptr] {

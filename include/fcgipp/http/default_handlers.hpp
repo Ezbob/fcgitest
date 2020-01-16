@@ -3,13 +3,13 @@
 #define _HEADER_FILE_default_handlers_20200113205909_
 
 #include "fcgipp/basic_handler.hpp"
-#include "fcgipp/basic_request_response.hpp"
+#include "fcgipp/basic_server_request_response.hpp"
 #include "fcgiapp.h"
 #include <memory>
 
 namespace fcgipp {
     struct DefaultHttpNotFoundHandler : public BasicHandler {
-        void handle(std::shared_ptr<fcgipp::BasicRequestResponse> req) {
+        void handle(std::shared_ptr<fcgipp::BasicServerRequestResponse> req) {
             req->answerWith(
                     "HTTP/1.1 404 Not Found\r\n"
                     "Status: 404 Not Found\r\n"
@@ -24,7 +24,7 @@ namespace fcgipp {
     };
 
     struct DefaultHttpMethodNotAllowedHandler : public BasicHandler {
-        void handle(std::shared_ptr<fcgipp::BasicRequestResponse> req) {
+        void handle(std::shared_ptr<fcgipp::BasicServerRequestResponse> req) {
             req->answerWith(
                     "HTTP/1.1 405 Method Not Allowed\r\n"
                     "Status: 405 Method Not Allowed\r\n"
@@ -39,7 +39,7 @@ namespace fcgipp {
     };
 
     struct DefaultHttpInternalServerErrorHandler : public BasicHandler {
-        void handle(std::shared_ptr<fcgipp::BasicRequestResponse> req) {
+        void handle(std::shared_ptr<fcgipp::BasicServerRequestResponse> req) {
             req->answerWith(
                     "HTTP/1.1 500 Internal Server Error\r\n"
                     "Status: 500 Internal Server Error\r\n"
@@ -54,7 +54,7 @@ namespace fcgipp {
     };
 
     struct DefaultHttpUnauthorizedHandler : public BasicHandler {
-        void handle(std::shared_ptr<fcgipp::BasicRequestResponse> req) {
+        void handle(std::shared_ptr<fcgipp::BasicServerRequestResponse> req) {
             req->answerWith(
                     "HTTP/1.1 401 Unauthorized\r\n"
                     "Status: 401 Unauthorized\r\n"

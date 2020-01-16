@@ -44,7 +44,7 @@ class MyHandler : public fcgipp::BasicHandler {
     }
 
 public:
-    void handle(std::shared_ptr<fcgipp::BasicRequestResponse> rr) {
+    void handle(std::shared_ptr<fcgipp::BasicServerRequestResponse> rr) {
         fcgipp::HttpResponse resp;
         std::ostream &out = resp.body();
 
@@ -78,7 +78,7 @@ public:
 
 class MyJsonHandler : public fcgipp::BasicHandler {
 public:
-    void handle(std::shared_ptr<fcgipp::BasicRequestResponse> rr) {
+    void handle(std::shared_ptr<fcgipp::BasicServerRequestResponse> rr) {
         fcgipp::JsonResponse resp;
 
         auto t = std::time(nullptr);

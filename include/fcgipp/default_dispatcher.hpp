@@ -5,7 +5,7 @@
 #include "fcgipp/http/method.hpp"
 #include "fcgipp/http/default_handlers.hpp"
 #include "basic_dispatcher.hpp"
-#include "basic_request_response.hpp"
+#include "basic_server_request_response.hpp"
 #include "basic_authenticator.hpp"
 #include "basic_multiplexer.hpp"
 #include <unordered_map>
@@ -22,7 +22,7 @@ namespace fcgipp {
 
         ~DefaultDispatcher() = default;
 
-        void dispatch(std::shared_ptr<BasicRequestResponse> req_ptr) override;
+        void dispatch(std::shared_ptr<BasicServerRequestResponse> req_ptr) override;
 
         void add_endpoint(std::string uri, HttpMethod, std::shared_ptr<BasicHandler>);
 
@@ -51,7 +51,7 @@ namespace fcgipp {
         }
 
     private:
-        std::shared_ptr<BasicHandler> select(std::shared_ptr<BasicRequestResponse> req_ptr) const;
+        std::shared_ptr<BasicHandler> select(std::shared_ptr<BasicServerRequestResponse> req_ptr) const;
 
         std::string build_uri(const char *raw) const;
         void add_end_slash(std::string &uri) const;
