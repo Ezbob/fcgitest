@@ -3,48 +3,63 @@
 
 using namespace fcgipp;
 
-std::shared_ptr<BasicHandler> DefaultDispatcher::dispatch(std::shared_ptr<BasicRequestResponse> req_ptr) {
-    std::shared_ptr<BasicHandler> current_handler;
+std::shared_ptr<BasicHandler> DefaultDispatcher::select(std::shared_ptr<BasicRequestResponse> req_res_ptr) const {
+    auto raw_method = req_res_ptr->getParameter("REQUEST_METHOD");
 
-    if ( m_authenticator.is_valid(req_ptr) ) {
-        auto raw_method = req_ptr->getParameter("REQUEST_METHOD");
-
-        if (!raw_method) {
-            return m_handler_500;
-        }
-
-        std::string key;
-        auto uri = req_ptr->getParameter("PATH_INFO");
-
-        if (uri) {
-            key = uri;
-            add_end_slash(key);
-        } else { // PATH_INFO is not here we are aiming for /
-            key = "/";
-        }
-
-        auto it = m_dispatch_matrix.find(key);
-        if ( it != m_dispatch_matrix.end() ) {
-            HttpMethod actual_method = string_to_httpmethod(raw_method);
-
-            if (actual_method == HttpMethod::Not_a_method) return m_handler_405;
-
-            HandlerMap_t &entry = it->second;
-
-            auto h_it = entry.find(actual_method);
-            if (h_it != entry.end()) {
-                current_handler = h_it->second;
-            } else {
-                current_handler = m_handler_405;
-            }
-        } else {
-            current_handler = m_handler_404;
-        }
-    } else {
-        current_handler = m_handler_401;
+    if ( !raw_method ) {
+        return m_handler_500;
     }
 
-    return current_handler;
+    if ( !m_authenticator.is_valid(req_res_ptr) ) {
+        return m_handler_401;
+    }
+
+    auto key = build_uri(req_res_ptr->getParameter("PATH_INFO"));
+
+    auto it = m_dispatch_matrix.find(key);
+    if ( it == m_dispatch_matrix.end() ) {
+        return m_handler_404;
+    }
+
+    auto actual_method = string_to_httpmethod(raw_method);
+    if ( actual_method == HttpMethod::Not_a_method ) {
+        return m_handler_405;
+    }
+
+    const auto &entry = it->second;
+
+    auto h_it = entry.find(actual_method);
+    if ( h_it == entry.end() ) {
+        return m_handler_405;
+    }
+
+    return h_it->second;
+}
+
+std::string DefaultDispatcher::build_uri(const char *raw) const {
+    std::string key;
+    if (raw) {
+        key = raw;
+        add_end_slash(key);
+    } else { // PATH_INFO is not here we are aiming for /
+        key = "/";
+    }
+    return key;
+}
+
+void DefaultDispatcher::add_end_slash(std::string &uri) const {
+    if ( uri.size() == 0 ) return;
+    if ( uri.at(uri.size() - 1) != '/' ) {
+        uri = uri + "/";
+    }
+}
+
+void DefaultDispatcher::dispatch(std::shared_ptr<BasicRequestResponse> req_ptr) {
+    std::shared_ptr<BasicHandler> current_handler = select(req_ptr);
+
+    m_scheduler.post([current_handler, req_ptr] {
+        current_handler->handle(req_ptr);
+    });
 }
 
 void DefaultDispatcher::add_endpoint(std::string uri, HttpMethod meth, std::shared_ptr<BasicHandler> handler) {

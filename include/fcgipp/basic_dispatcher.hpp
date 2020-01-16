@@ -10,7 +10,7 @@ namespace fcgipp {
 
     struct BasicDispatcher {
         virtual ~BasicDispatcher() = default;
-        virtual std::shared_ptr<BasicHandler> dispatch(std::shared_ptr<BasicRequestResponse> req_ptr) = 0;
+        virtual void dispatch(std::shared_ptr<BasicRequestResponse> req_ptr) = 0;
     };
 
 };

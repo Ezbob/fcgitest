@@ -17,30 +17,31 @@ extern char ** environ;
 #include <iomanip>
 #include <ctime>
 
-static void penv(const char * const * envp, std::ostream &stream)
-{
-    stream << "<pre>" << fcgipp::HTTP_LINE_END;
-    for ( ; *envp; ++envp)
-    {
-        stream << *envp << fcgipp::HTTP_LINE_END;
-    }
-    stream << "</pre>";
-}
-
-static void penv(const std::vector<const char *> &envp, std::ostream &stream)
-{
-    stream << "<pre>" << fcgipp::HTTP_LINE_END;
-    for ( auto c : envp )
-    {
-        stream << c << fcgipp::HTTP_LINE_END;
-    }
-    stream << "</pre>";
-}
-
 static long g_pid = getpid();
 static int g_count = 0;
 
 class MyHandler : public fcgipp::BasicHandler {
+
+    void penv(const char * const * envp, std::ostream &stream)
+    {
+        stream << "<pre>" << fcgipp::HTTP_LINE_END;
+        for ( ; *envp; ++envp)
+        {
+            stream << *envp << fcgipp::HTTP_LINE_END;
+        }
+        stream << "</pre>";
+    }
+
+    void penv(const std::vector<const char *> &envp, std::ostream &stream)
+    {
+        stream << "<pre>" << fcgipp::HTTP_LINE_END;
+        for ( auto c : envp )
+        {
+            stream << c << fcgipp::HTTP_LINE_END;
+        }
+        stream << "</pre>";
+    }
+
 public:
     void handle(std::shared_ptr<fcgipp::BasicRequestResponse> rr) {
         fcgipp::HttpResponse resp;
@@ -99,8 +100,8 @@ int main(void) {
     asio::io_context::work work_io(io);
 
     fcgipp::DefaultAuthenticator authenticator;
-    fcgipp::DefaultDispatcher dispatcher(authenticator);
-    fcgipp::FcgiAcceptor acceptor(io, dispatcher);
+    fcgipp::DefaultDispatcher dispatcher(authenticator, io);
+    fcgipp::FcgiAcceptor acceptor(dispatcher);
 
     auto root_handler = std::make_shared<MyHandler>();
     auto clock_handler = std::make_shared<MyJsonHandler>();
@@ -108,12 +109,9 @@ int main(void) {
     dispatcher.add_get("/", root_handler);
     dispatcher.add_get("/time", clock_handler);
 
-    std::thread accepting_thread([&acceptor] {
-        /*
-         *  Acceptor is running in it's own thread
-         */
-        acceptor.start_accepting();
-    });
+    std::thread accepting_thread(&fcgipp::FcgiAcceptor::start_accepting, acceptor);
+
+    accepting_thread.detach();
 
     // handler is running on the first thread
     io.run();

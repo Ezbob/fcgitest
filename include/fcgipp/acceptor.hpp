@@ -11,13 +11,11 @@
 namespace fcgipp {
 
     class FcgiAcceptor {
-        asio::io_context &m_async_scheduler;
         BasicDispatcher &m_dispatcher;
 
     public:
-        FcgiAcceptor(asio::io_context &async_scheduler, BasicDispatcher &dispatch)
-            : m_async_scheduler(async_scheduler)
-            , m_dispatcher(dispatch) {
+        FcgiAcceptor(BasicDispatcher &dispatch)
+            : m_dispatcher(dispatch) {
             FCGX_Init();
         }
 
@@ -26,11 +24,7 @@ namespace fcgipp {
                 auto request = std::make_shared<FcgiRequestResponse>();
 
                 if ( request->accept() ) {
-                    auto handler = m_dispatcher.dispatch(request);
-
-                    m_async_scheduler.post([handler, request] {
-                        handler->handle(request);
-                    });
+                    m_dispatcher.dispatch(request);
                 }
             }
         }
