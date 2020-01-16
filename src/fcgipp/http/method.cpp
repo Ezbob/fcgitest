@@ -3,7 +3,7 @@
 
 using namespace fcgipp;
 
-HttpMethod fcgipp::string_to_httpmethod(std::string &&s) {
+HttpMethod fcgipp::string_to_httpmethod(std::string const& s) {
     if (s == "GET") {
         return HttpMethod::Get;
     } else if (s == "POST") {
@@ -21,7 +21,7 @@ HttpMethod fcgipp::string_to_httpmethod(std::string &&s) {
     }
 }
 
-std::string fcgipp::httpmethod_to_string(fcgipp::HttpMethod &&m) {
+std::string fcgipp::httpmethod_to_string(fcgipp::HttpMethod const& m) {
     if (m == fcgipp::HttpMethod::Get) {
         return "GET";
     } else if (m == fcgipp::HttpMethod::Post) {

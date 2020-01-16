@@ -1,5 +1,5 @@
 
-#include "fcgipp/dispatcher.hpp"
+#include "fcgipp/default_dispatcher.hpp"
 
 using namespace fcgipp;
 

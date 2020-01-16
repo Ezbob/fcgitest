@@ -22,17 +22,17 @@ namespace fcgipp {
      *
      * When the reference count reaches zero, the request is finished if it has been accepted.
      */
-    class FcgiRequestResponse : public BasicRequestResponse, 
-                                public std::enable_shared_from_this<FcgiRequestResponse> {
+    class FcgiServerRequestResponse : public BasicRequestResponse, 
+                                public std::enable_shared_from_this<FcgiServerRequestResponse> {
         FCGX_Request m_request;
         bool m_is_accepted;
 
     public:
-        FcgiRequestResponse() : m_is_accepted(false) {
+        FcgiServerRequestResponse() : m_is_accepted(false) {
             FCGX_InitRequest(&m_request, 0, 0);
         }
 
-        ~FcgiRequestResponse() {
+        ~FcgiServerRequestResponse() {
             if (m_is_accepted) {
                 FCGX_Finish_r(&m_request);
             }
@@ -71,7 +71,7 @@ namespace fcgipp {
             return res;
         }
 
-        std::shared_ptr<FcgiRequestResponse> get() {
+        std::shared_ptr<FcgiServerRequestResponse> get() {
             return shared_from_this();
         }
     };

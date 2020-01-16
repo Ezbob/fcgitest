@@ -22,7 +22,6 @@ namespace fcgipp {
 
         ~DefaultDispatcher() = default;
 
-
         void dispatch(std::shared_ptr<BasicRequestResponse> req_ptr) override;
 
         void add_endpoint(std::string uri, HttpMethod, std::shared_ptr<BasicHandler>);
@@ -52,7 +51,6 @@ namespace fcgipp {
         }
 
     private:
-
         std::shared_ptr<BasicHandler> select(std::shared_ptr<BasicRequestResponse> req_ptr) const;
 
         std::string build_uri(const char *raw) const;
