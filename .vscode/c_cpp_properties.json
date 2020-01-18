@@ -14,6 +14,7 @@
             "includePath": [
                 "${workspaceFolder}/lib/fcgi-2.4.0/**",
                 "${workspaceFolder}/include/**",
+                "${workspaceFolder}/src/**",
                 "${workspaceFolder}/lib/asio/asio/include",
                 "${workspaceFolder}/lib/json11/**"
             ]
