@@ -1,13 +1,17 @@
 
-#ifndef _HEADER_FILE_uri_dispatcher_20200103234120_
-#define _HEADER_FILE_uri_dispatcher_20200103234120_
+#pragma once
 
 #include "fcgipp/http/method.hpp"
-#include "fcgipp/http/default_handlers.hpp"
-#include "basic_dispatcher.hpp"
-#include "basic_server_request_response.hpp"
-#include "basic_authenticator.hpp"
-#include "basic_multiplexer.hpp"
+#include "fcgipp/http/default_http_internal_server_error_handler.hpp"
+#include "fcgipp/http/default_http_method_not_allowed_handler.hpp"
+#include "fcgipp/http/default_http_not_found_handler.hpp"
+#include "fcgipp/http/default_http_unauthorized_handler.hpp"
+
+#include "fcgipp/basic_dispatcher.hpp"
+#include "fcgipp/basic_server_request_response.hpp"
+#include "fcgipp/basic_authenticator.hpp"
+#include "fcgipp/basic_multiplexer.hpp"
+
 #include <unordered_map>
 #include <memory>
 #include <string>
@@ -68,5 +72,3 @@ namespace fcgipp {
         BasicMultiplexer &m_scheduler;
     };
 };
-
-#endif

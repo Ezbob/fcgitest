@@ -1,0 +1,15 @@
+#include "fcgipp/default_authenticator.hpp"
+#include "fcgipp/default_dispatcher.hpp"
+#include "fcgipp/basic_handler.hpp"
+#include "fcgipp/basic_response.hpp"
+#include "fcgipp/basic_multiplexer.hpp"
+
+#include "fcgipp/http/method.hpp"
+#include "fcgipp/http/response.hpp"
+#include "fcgipp/http/default_http_internal_server_error_handler.hpp"
+#include "fcgipp/http/default_http_method_not_allowed_handler.hpp"
+#include "fcgipp/http/default_http_not_found_handler.hpp"
+#include "fcgipp/http/default_http_unauthorized_handler.hpp"
+
+#include "fcgipp/fcgi_server_request_response.hpp"
+#include "fcgipp/fcgi_acceptor.hpp"

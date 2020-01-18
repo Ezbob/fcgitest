@@ -3,9 +3,9 @@
 #define _HEADER_FILE_application_server_20200103163952_
 
 #include <memory>
-#include "basic_acceptor.hpp"
-#include "fcgi_server_request_response.hpp"
-#include "default_dispatcher.hpp"
+#include "fcgipp/basic_acceptor.hpp"
+#include "fcgipp/fcgi_server_request_response.hpp"
+#include "fcgipp/default_dispatcher.hpp"
 #include "fcgiapp.h"
 
 namespace fcgipp {

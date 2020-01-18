@@ -41,11 +41,12 @@ SET(SOURCES
     "${SOURCES_PREFIX}/fcgipp/default_dispatcher.cpp"
     "${SOURCES_PREFIX}/fcgipp/http/method.cpp"
     "${SOURCES_PREFIX}/fcgipp/http/response.cpp"
-    "${SOURCES_PREFIX}/fcgipp_shims/json11_shim.cpp"
+    "${SOURCES_PREFIX}/fcgipp_shims/asio_multiplexer.cpp"
 )
 
 SET(INCLUDES
     "${CMAKE_CURRENT_SOURCE_DIR}/include"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src"
     "${LIB_DIR}/asio/asio/include"
 )
 

@@ -7,16 +7,15 @@ extern char ** environ;
 #endif
 
 #include "asio.hpp"
-#include "fcgipp/fcgi.hpp"
-#include "fcgipp_shims/json11_shim.hpp"
+#include "fcgipp/fcgipp.hpp"
 #include "fcgipp_shims/asio_multiplexer.hpp"
 #include "json11.hpp"
 
 #include <thread>
 #include <sstream>
 #include <chrono>
-#include <iomanip>
 #include <ctime>
+#include <type_traits>
 
 static long g_pid = getpid();
 static int g_count = 0;
@@ -76,8 +75,7 @@ public:
     }
 };
 
-class MyJsonHandler : public fcgipp::BasicHandler {
-public:
+struct MyJsonHandler : public fcgipp::BasicHandler {
     void handle(std::shared_ptr<fcgipp::BasicServerRequestResponse> rr) {
         fcgipp::JsonResponse resp;
 
@@ -89,7 +87,7 @@ public:
             {"localtime", std::string(timestr)}
         };
 
-        resp.body() << j;
+        resp.body() << j.dump();
 
         rr->answerWith(resp);
     }
@@ -100,9 +98,9 @@ int main(void) {
     asio::io_context io;
     asio::io_context::work work_io(io);
 
-    fcgipp::DefaultAuthenticator auth;
-    fcgipp::AsioMultiplexer multiplex(io);
-    fcgipp::DefaultDispatcher dispatcher(auth, multiplex);
+    fcgipp::AsioMultiplexer multiplexer(io);
+    fcgipp::DefaultAuthenticator authenticator;
+    fcgipp::DefaultDispatcher dispatcher(authenticator, multiplexer);
     fcgipp::FcgiAcceptor acceptor(dispatcher);
 
     auto root_handler = std::make_shared<MyHandler>();
@@ -112,8 +110,6 @@ int main(void) {
     dispatcher.add_get("/time", clock_handler);
 
     std::thread accepting_thread(&fcgipp::FcgiAcceptor::start_accepting, acceptor);
-
-    accepting_thread.detach();
 
     // handler is running on the first thread
     io.run();

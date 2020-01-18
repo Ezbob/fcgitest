@@ -1,8 +1,7 @@
 
-#ifndef _HEADER_FILE_basic_handler_20200103163230_
-#define _HEADER_FILE_basic_handler_20200103163230_
+#pragma once
 
-#include "basic_server_request_response.hpp"
+#include "fcgipp/basic_server_request_response.hpp"
 #include <memory>
 
 namespace fcgipp {
@@ -13,5 +12,3 @@ namespace fcgipp {
     };
 
 };
-
-#endif
