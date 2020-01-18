@@ -6,7 +6,7 @@
 #include <memory>
 #include <cstring>
 #include <vector>
-#include "basic_response.hpp"
+#include "basic_formatted_response.hpp"
 #include "basic_server_request_response.hpp"
 #include "fcgiapp.h"
 
@@ -35,9 +35,9 @@ namespace fcgipp {
 
         bool is_accepted();
 
-        int answerWith(BasicResponse &res);
+        int respond_with(BasicFormattedResponse &res);
 
-        int answerWith(std::string const &res);
+        int respond_with(std::string const &res);
 
         int log(std::string &res);
 

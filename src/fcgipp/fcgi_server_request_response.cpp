@@ -22,12 +22,12 @@ bool FcgiServerRequestResponse::is_accepted() {
     return m_is_accepted;
 }
 
-int FcgiServerRequestResponse::answerWith(BasicResponse &res) {
+int FcgiServerRequestResponse::respond_with(BasicFormattedResponse &res) {
     auto r = res.render();
     return FCGX_PutStr(r.c_str(), r.size(), m_request.out);
 }
 
-int FcgiServerRequestResponse::answerWith(std::string const &res) {
+int FcgiServerRequestResponse::respond_with(std::string const &res) {
     return FCGX_PutStr(res.c_str(), res.size(), m_request.out);
 }
 

@@ -4,7 +4,7 @@
 using namespace fcgipp;
 
 void DefaultHttpUnauthorizedHandler::handle(std::shared_ptr<fcgipp::BasicServerRequestResponse> req) {
-    req->answerWith(
+    req->respond_with(
             "HTTP/1.1 401 Unauthorized\r\n"
             "Status: 401 Unauthorized\r\n"
             "Content-type: text/html\r\n"

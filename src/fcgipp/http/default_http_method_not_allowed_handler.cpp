@@ -4,7 +4,7 @@
 using namespace fcgipp;
 
 void DefaultHttpMethodNotAllowedHandler::handle(std::shared_ptr<fcgipp::BasicServerRequestResponse> req) {
-    req->answerWith(
+    req->respond_with(
             "HTTP/1.1 405 Method Not Allowed\r\n"
             "Status: 405 Method Not Allowed\r\n"
             "Content-type: text/html\r\n"

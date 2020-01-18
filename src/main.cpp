@@ -71,7 +71,7 @@ public:
         out << "</body>"
                "</html>";
 
-        rr->answerWith(resp);
+        rr->respond_with(resp);
     }
 };
 
@@ -89,7 +89,7 @@ struct MyJsonHandler : public fcgipp::BasicHandler {
 
         resp.body() << j.dump();
 
-        rr->answerWith(resp);
+        rr->respond_with(resp);
     }
 };
 

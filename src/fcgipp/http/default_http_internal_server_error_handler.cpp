@@ -4,7 +4,7 @@
 using namespace fcgipp;
 
 void DefaultHttpInternalServerErrorHandler::handle(std::shared_ptr<fcgipp::BasicServerRequestResponse> req) {
-    req->answerWith(
+    req->respond_with(
             "HTTP/1.1 500 Internal Server Error\r\n"
             "Status: 500 Internal Server Error\r\n"
             "Content-type: text/html\r\n"

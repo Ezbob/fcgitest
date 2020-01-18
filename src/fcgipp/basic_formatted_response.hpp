@@ -6,8 +6,8 @@
 #include <string>
 
 namespace fcgipp {
-    struct BasicResponse {
-        virtual ~BasicResponse() = default;
+    struct BasicFormattedResponse {
+        virtual ~BasicFormattedResponse() = default;
         virtual std::string render() = 0;
     };
 };

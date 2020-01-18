@@ -4,7 +4,7 @@
 using namespace fcgipp;
 
 void DefaultHttpNotFoundHandler::handle(std::shared_ptr<fcgipp::BasicServerRequestResponse> req) {
-    req->answerWith(
+    req->respond_with(
             "HTTP/1.1 404 Not Found\r\n"
             "Status: 404 Not Found\r\n"
             "Content-type: text/html\r\n"
