@@ -7,18 +7,16 @@ PROJECT(${PROJECT_NAME}
     LANGUAGES CXX C
 )
 
-# CMAKE module path adding "cmake" directory to the path
-SET(CMAKE_MODULE_PATH  ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake")
+# Some paths
+SET(CMAKE_MODULE_PATH  ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake)
+SET(SOURCES_PREFIX ${CMAKE_CURRENT_SOURCE_DIR}/src)
+SET(LIB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/lib)
 
 # Adds the cmake c++ standard tests in cxx_standards.cmake file
 INCLUDE(cxx_standards)
 
 # tests for compiler compliance and sets the C++ standard to C++11
 USE_CXX11_STANDARD()
-
-# SOURCES_PREFIX refers to the source folder and is useful when stating
-# the source files depedencies of a target
-SET(SOURCES_PREFIX "${CMAKE_CURRENT_SOURCE_DIR}/src")
 
 # A set of compilation flags that is always on when compiling C++
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Dc_plusplus -DASIO_STANDALONE")
@@ -31,48 +29,51 @@ SET(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3")
 # Linker flags. This just makes the c and c++ stdlibs statically linked for higher portability
 SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static-libgcc -static-libstdc++")
 
-SET(LIB_DIR "${CMAKE_CURRENT_SOURCE_DIR}/lib")
-
-SET(EXEC_NAME "${PROJECT_NAME}")
-
-# Next steps:
+# Sources sets
 SET(SOURCES
-    "${SOURCES_PREFIX}/fcgipp/default_dispatcher.cpp"
-    "${SOURCES_PREFIX}/fcgipp/http/method.cpp"
-    "${SOURCES_PREFIX}/fcgipp/http/response.cpp"
-    "${SOURCES_PREFIX}/fcgipp_shims/asio_multiplexer.cpp"
+    ${SOURCES_PREFIX}/fcgipp/default_dispatcher.cpp
+
+    ${SOURCES_PREFIX}/fcgipp/http/method.cpp
+    ${SOURCES_PREFIX}/fcgipp/http/response.cpp
+    ${SOURCES_PREFIX}/fcgipp/http/default_http_internal_server_error_handler.cpp
+    ${SOURCES_PREFIX}/fcgipp/http/default_http_method_not_allowed_handler.cpp
+    ${SOURCES_PREFIX}/fcgipp/http/default_http_not_found_handler.cpp
+    ${SOURCES_PREFIX}/fcgipp/http/default_http_unauthorized_handler.cpp
+
+    ${SOURCES_PREFIX}/fcgipp_shims/asio_multiplexer.cpp
 )
 
 SET(INCLUDES
-    "${CMAKE_CURRENT_SOURCE_DIR}/include"
-    "${CMAKE_CURRENT_SOURCE_DIR}/src"
-    "${LIB_DIR}/asio/asio/include"
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/src
+    ${LIB_DIR}/asio/asio/include
 )
 
 SET(MAIN_SOURCE
-    "${SOURCES_PREFIX}/main.cpp"
+    ${SOURCES_PREFIX}/main.cpp
 )
 
 SET(MAINLESS_LIB
-    "fcgipp_lib"
+    fcgipp-lib
 )
 
-ADD_SUBDIRECTORY("${LIB_DIR}/fcgi-2.4.0")
+# libraries and their cmake files
+ADD_SUBDIRECTORY(${LIB_DIR}/fcgi-2.4.0 EXCLUDE_FROM_ALL)
+ADD_SUBDIRECTORY(${LIB_DIR}/json11 EXCLUDE_FROM_ALL)
 
-ADD_SUBDIRECTORY("${LIB_DIR}/json11" EXCLUDE_FROM_ALL)
-
-
+# lib without the main file
 ADD_LIBRARY(${MAINLESS_LIB} STATIC "")
 TARGET_SOURCES(${MAINLESS_LIB} PUBLIC ${SOURCES})
 TARGET_INCLUDE_DIRECTORIES(${MAINLESS_LIB} PUBLIC ${INCLUDES})
 TARGET_LINK_LIBRARIES(${MAINLESS_LIB} PUBLIC fcgi-lib json11)
 
-
+# binary using the main file
+SET(EXEC_NAME ${PROJECT_NAME})
 ADD_EXECUTABLE(${EXEC_NAME} "")
 TARGET_SOURCES(${EXEC_NAME} PRIVATE ${MAIN_SOURCE})
 TARGET_LINK_LIBRARIES(${EXEC_NAME} PRIVATE ${MAINLESS_LIB})
 
-
+# sockets for win and other
 if(WIN32)
     TARGET_LINK_LIBRARIES(${MAINLESS_LIB} PRIVATE ws2_32)
 else(WIN32)
