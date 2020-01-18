@@ -1,5 +1,6 @@
 
 #include "fcgipp/fcgi_server_request_response.hpp"
+#include "fcgipp/basic_formatted_response.hpp"
 
 using namespace fcgipp;
 
