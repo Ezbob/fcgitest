@@ -1,6 +1,5 @@
 
-#ifndef _HEADER_FILE_application_server_20200103163952_
-#define _HEADER_FILE_application_server_20200103163952_
+#pragma once
 
 #include <memory>
 #include "fcgipp/basic_acceptor.hpp"
@@ -14,22 +13,8 @@ namespace fcgipp {
         BasicDispatcher &m_dispatcher;
 
     public:
-        FcgiAcceptor(BasicDispatcher &dispatch)
-            : m_dispatcher(dispatch) {
-            FCGX_Init();
-        }
+        FcgiAcceptor(BasicDispatcher &dispatch);
 
-        void start_accepting() override {
-            while (true) {
-                auto request = std::make_shared<FcgiServerRequestResponse>();
-
-                if ( request->accept() ) {
-                    m_dispatcher.dispatch(request);
-                }
-            }
-        }
-
+        void start_accepting() override;
     };
 };
-
-#endif

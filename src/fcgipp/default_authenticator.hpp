@@ -13,9 +13,7 @@ namespace fcgipp {
     public:
         ~DefaultAuthenticator() = default;
 
-        bool is_valid(std::shared_ptr<BasicServerRequestResponse> const &) {
-            return true;
-        }
+        bool is_valid(std::shared_ptr<BasicServerRequestResponse> const &) override;
     };
 };
 

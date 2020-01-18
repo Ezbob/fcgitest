@@ -32,6 +32,9 @@ SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static-libgcc -static-lib
 # Sources sets
 SET(SOURCES
     ${SOURCES_PREFIX}/fcgipp/default_dispatcher.cpp
+    ${SOURCES_PREFIX}/fcgipp/default_authenticator.cpp
+    ${SOURCES_PREFIX}/fcgipp/fcgi_acceptor.cpp
+    ${SOURCES_PREFIX}/fcgipp/fcgi_server_request_response.cpp
 
     ${SOURCES_PREFIX}/fcgipp/http/method.cpp
     ${SOURCES_PREFIX}/fcgipp/http/response.cpp

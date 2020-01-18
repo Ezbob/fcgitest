@@ -1,6 +1,5 @@
 
-#ifndef _HEADER_FILE_fcgipp_20200102160204_
-#define _HEADER_FILE_fcgipp_20200102160204_
+#pragma once
 
 #include <sstream>
 #include <iostream>
@@ -28,54 +27,25 @@ namespace fcgipp {
         bool m_is_accepted;
 
     public:
-        FcgiServerRequestResponse() : m_is_accepted(false) {
-            FCGX_InitRequest(&m_request, 0, 0);
-        }
+        FcgiServerRequestResponse();
 
-        ~FcgiServerRequestResponse() {
-            if (m_is_accepted) {
-                FCGX_Finish_r(&m_request);
-            }
-        }
+        ~FcgiServerRequestResponse();
 
-        bool accept() {
-            m_is_accepted = (FCGX_Accept_r(&m_request) == 0);
-            return m_is_accepted;
-        }
+        bool accept();
 
-        bool is_accepted() {
-            return m_is_accepted;
-        }
+        bool is_accepted();
 
-        int answerWith(BasicResponse &res) {
-            auto r = res.render();
-            return FCGX_PutStr(r.c_str(), r.size(), m_request.out);
-        }
+        int answerWith(BasicResponse &res);
 
-        int answerWith(std::string const &res) {
-            return FCGX_PutStr(res.c_str(), res.size(), m_request.out);
-        }
+        int answerWith(std::string const &res);
 
-        int log(std::string &res) {
-            return FCGX_PutStr(res.c_str(), res.size(), m_request.err);
-        }
+        int log(std::string &res);
 
-        char const *get_parameter(std::string const &name) const override {
-            return FCGX_GetParam(name.c_str(), m_request.envp);
-        }
+        char const *get_parameter(std::string const &name) const override;
 
-        const std::vector<const char *> get_parameters() const override {
-            std::vector<const char *> res;
-            for (size_t i = 0; m_request.envp[i] != nullptr; ++i) 
-                res.push_back(m_request.envp[i]);
-            return res;
-        }
+        const std::vector<const char *> get_parameters() const override;
 
-        std::shared_ptr<FcgiServerRequestResponse> get() {
-            return shared_from_this();
-        }
+        std::shared_ptr<FcgiServerRequestResponse> get();
     };
 
 };
-
-#endif
