@@ -17,3 +17,4 @@
 #include "fcgipp/default_dispatcher.hpp"
 #include "fcgipp/fcgi_acceptor.hpp"
 #include "fcgipp/fcgi_server_request_response.hpp"
+#include "fcgipp/fcgi_application.hpp"

@@ -98,18 +98,14 @@ int main(void) {
     asio::io_context io;
     asio::io_context::work work_io(io);
 
-    fcgipp::AsioMultiplexer multiplexer(io);
-    fcgipp::DefaultAuthenticator authenticator;
-    fcgipp::DefaultDispatcher dispatcher(authenticator, multiplexer);
-    fcgipp::FcgiAcceptor acceptor(dispatcher);
+    fcgipp::FcgiApplication app(new fcgipp::AsioMultiplexer(io));
 
-    auto root_handler = std::make_shared<MyHandler>();
-    auto clock_handler = std::make_shared<MyJsonHandler>();
+    auto &dispatcher = app.get_dispatcher();
 
-    dispatcher.add_get("/", root_handler);
-    dispatcher.add_get("/time", clock_handler);
+    dispatcher.add_endpoint("/", fcgipp::HttpMethod::Get, std::make_shared<MyHandler>());
+    dispatcher.add_endpoint("/time", fcgipp::HttpMethod::Get, std::make_shared<MyJsonHandler>());
 
-    std::thread accepting_thread(&fcgipp::FcgiAcceptor::start_accepting, acceptor);
+    app.start_accepting();
 
     // handler is running on the first thread
     io.run();
