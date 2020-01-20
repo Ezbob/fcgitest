@@ -31,8 +31,8 @@ namespace fcgipp {
         )
         : m_async_scheduler(std::move(sch))
         , m_authenticator(auth == nullptr ? Ptr<BasicAuthenticator>(new DefaultAuthenticator()) : std::move(auth) )
-        , m_dispatcher(dispatch == nullptr ? Ptr<DefaultDispatcher>(new DefaultDispatcher(*auth)) : std::move(dispatch))
-        , m_acceptor(acceptor == nullptr ? Ptr<BasicAcceptor>(new FcgiAcceptor(*m_dispatcher, *sch)) : std::move(acceptor))
+        , m_dispatcher(dispatch == nullptr ? Ptr<DefaultDispatcher>(new DefaultDispatcher(*m_authenticator)) : std::move(dispatch))
+        , m_acceptor(acceptor == nullptr ? Ptr<BasicAcceptor>(new FcgiAcceptor(*m_dispatcher, *m_async_scheduler)) : std::move(acceptor))
         {}
 
         void add_get(std::string uri, std::shared_ptr<BasicHandler> req) {
