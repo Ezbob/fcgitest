@@ -45,7 +45,7 @@ SET(SOURCES
 )
 
 SET(SHIM_SOURCES
-    ${SOURCES_PREFIX}/fcgipp_shims/asio_multiplexer.cpp
+    ${SOURCES_PREFIX}/fcgipp_shims/asio_scheduler.cpp
 )
 
 SET(INCLUDES

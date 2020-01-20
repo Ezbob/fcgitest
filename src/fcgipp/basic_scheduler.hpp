@@ -5,8 +5,8 @@
 
 namespace fcgipp {
 
-    struct BasicMultiplexer {
-        virtual ~BasicMultiplexer() = default;
+    struct BasicScheduler {
+        virtual ~BasicScheduler() = default;
         virtual void schedule_task(std::function<void()> const&) = 0;
     };
 

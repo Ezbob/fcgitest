@@ -2,7 +2,7 @@
 #include "fcgipp/basic_authenticator.hpp"
 #include "fcgipp/basic_dispatcher.hpp"
 #include "fcgipp/basic_handler.hpp"
-#include "fcgipp/basic_multiplexer.hpp"
+#include "fcgipp/basic_scheduler.hpp"
 #include "fcgipp/basic_formatted_response.hpp"
 #include "fcgipp/basic_server_request_response.hpp"
 

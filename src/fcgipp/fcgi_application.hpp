@@ -4,7 +4,7 @@
 #include <memory>
 #include <thread>
 #include "fcgipp/basic_acceptor.hpp"
-#include "fcgipp/basic_multiplexer.hpp"
+#include "fcgipp/basic_scheduler.hpp"
 #include "fcgipp/basic_authenticator.hpp"
 #include "fcgipp/basic_dispatcher.hpp"
 #include "fcgipp/default_authenticator.hpp"
@@ -17,14 +17,14 @@ namespace fcgipp {
         template<typename T>
         using Ptr = std::unique_ptr<T>;
 
-        Ptr<BasicMultiplexer> m_async_scheduler;
+        Ptr<BasicScheduler> m_async_scheduler;
         Ptr<BasicAuthenticator> m_authenticator;
         Ptr<BasicDispatcher> m_dispatcher;
         Ptr<BasicAcceptor> m_acceptor;
 
     public:
         FcgiApplication(
-            std::unique_ptr<BasicMultiplexer> sch,
+            std::unique_ptr<BasicScheduler> sch,
             std::unique_ptr<BasicAuthenticator> auth = std::unique_ptr<BasicAuthenticator>(),
             std::unique_ptr<BasicDispatcher> dispatch = std::unique_ptr<BasicDispatcher>(),
             std::unique_ptr<BasicAcceptor> acceptor = std::unique_ptr<BasicAcceptor>()

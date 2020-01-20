@@ -8,7 +8,7 @@ extern char ** environ;
 
 #include "asio.hpp"
 #include "fcgipp/fcgipp.hpp"
-#include "fcgipp_shims/asio_multiplexer.hpp"
+#include "fcgipp_shims/asio_scheduler.hpp"
 #include "json11.hpp"
 
 #include <thread>
@@ -98,16 +98,13 @@ int main(void) {
     asio::io_context io;
     asio::io_context::work work_io(io);
 
-    fcgipp::FcgiApplication app(std::unique_ptr<fcgipp::BasicMultiplexer>(new fcgipp::AsioMultiplexer(io)));
+    fcgipp::FcgiApplication app(std::unique_ptr<fcgipp::BasicScheduler>(new fcgipp::AsioScheduler(io)));
 
-    auto &dispatcher = app.get_dispatcher();
+    app.add_get("/", std::make_shared<MyHandler>());
+    app.add_get("/time", std::make_shared<MyJsonHandler>());
 
-    dispatcher.add_endpoint("/", fcgipp::HttpMethod::Get, std::make_shared<MyHandler>());
-    dispatcher.add_endpoint("/time", fcgipp::HttpMethod::Get, std::make_shared<MyJsonHandler>());
+    app.start(); // start does not block
 
-    app.start();
-
-    // handler is running on the first thread
     io.run();
 
     return 0;

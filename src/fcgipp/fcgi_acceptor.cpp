@@ -3,7 +3,7 @@
 
 using namespace fcgipp;
 
-FcgiAcceptor::FcgiAcceptor(BasicDispatcher &dispatch, BasicMultiplexer &sch)
+FcgiAcceptor::FcgiAcceptor(BasicDispatcher &dispatch, BasicScheduler &sch)
     : m_dispatcher(dispatch)
     , m_scheduler(sch) {
     FCGX_Init();
