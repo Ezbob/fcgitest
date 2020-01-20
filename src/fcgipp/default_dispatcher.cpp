@@ -57,9 +57,7 @@ void DefaultDispatcher::add_end_slash(std::string &uri) const {
 void DefaultDispatcher::dispatch(std::shared_ptr<BasicServerRequestResponse> req_ptr) {
     std::shared_ptr<BasicHandler> current_handler = select(req_ptr);
 
-    m_scheduler.schedule_task([current_handler, req_ptr] {
-        current_handler->handle(req_ptr);
-    });
+    current_handler->handle(req_ptr);
 }
 
 void DefaultDispatcher::add_endpoint(std::string uri, HttpMethod meth, std::shared_ptr<BasicHandler> handler) {
