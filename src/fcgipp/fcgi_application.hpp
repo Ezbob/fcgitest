@@ -13,43 +13,51 @@
 
 namespace fcgipp {
     class FcgiApplication {
-        std::unique_ptr<BasicAuthenticator> m_authenticator;
-        std::unique_ptr<BasicMultiplexer> m_multiplexer;
-        std::unique_ptr<BasicDispatcher> m_dispatcher;
-        std::unique_ptr<BasicAcceptor> m_acceptor;
+
+        template<typename T>
+        using Ptr = std::unique_ptr<T>;
+
+        Ptr<BasicMultiplexer> m_async_scheduler;
+        Ptr<BasicAuthenticator> m_authenticator;
+        Ptr<BasicDispatcher> m_dispatcher;
+        Ptr<BasicAcceptor> m_acceptor;
 
     public:
         FcgiApplication(
-            std::unique_ptr<BasicMultiplexer> multi,
-            std::unique_ptr<BasicAuthenticator> auth,
-            std::unique_ptr<BasicDispatcher> dispatch,
-            std::unique_ptr<BasicAcceptor> acceptor
-        ) 
-        : m_authenticator(std::move(auth))
-        , m_multiplexer(std::move(multi))
-        , m_dispatcher(std::move(dispatch))
-        , m_acceptor(std::move(acceptor))
+            std::unique_ptr<BasicMultiplexer> sch,
+            std::unique_ptr<BasicAuthenticator> auth = std::unique_ptr<BasicAuthenticator>(),
+            std::unique_ptr<BasicDispatcher> dispatch = std::unique_ptr<BasicDispatcher>(),
+            std::unique_ptr<BasicAcceptor> acceptor = std::unique_ptr<BasicAcceptor>()
+        )
+        : m_async_scheduler(std::move(sch))
+        , m_authenticator(auth == nullptr ? Ptr<BasicAuthenticator>(new DefaultAuthenticator()) : std::move(auth) )
+        , m_dispatcher(dispatch == nullptr ? Ptr<DefaultDispatcher>(new DefaultDispatcher(*auth)) : std::move(dispatch))
+        , m_acceptor(acceptor == nullptr ? Ptr<BasicAcceptor>(new FcgiAcceptor(*m_dispatcher, *sch)) : std::move(acceptor))
         {}
 
-        FcgiApplication(
-            std::unique_ptr<BasicMultiplexer> multi,
-            std::unique_ptr<BasicAuthenticator> auth = std::unique_ptr<BasicAuthenticator>(new DefaultAuthenticator())
-        ) 
-        : m_authenticator(std::move(auth))
-        , m_multiplexer(std::move(multi))
-        , m_dispatcher(new DefaultDispatcher(*auth, *multi))
-        , m_acceptor(new FcgiAcceptor(*m_dispatcher))
-        {}
+        void add_get(std::string uri, std::shared_ptr<BasicHandler> req) {
+            m_dispatcher->add_endpoint(uri, HttpMethod::Get, req);
+        }
 
-        FcgiApplication(
-            BasicMultiplexer *multi,
-            BasicAuthenticator *auth = (new DefaultAuthenticator())
-        ) 
-        : m_authenticator(std::move(auth))
-        , m_multiplexer(multi)
-        , m_dispatcher(new DefaultDispatcher(*auth, *multi))
-        , m_acceptor(new FcgiAcceptor(*m_dispatcher))
-        {}
+        void add_post(std::string uri, std::shared_ptr<BasicHandler> req) {
+            m_dispatcher->add_endpoint(uri, HttpMethod::Post, req);
+        }
+
+        void add_options(std::string uri, std::shared_ptr<BasicHandler> req) {
+            m_dispatcher->add_endpoint(uri, HttpMethod::Options, req);
+        }
+
+        void add_patch(std::string uri, std::shared_ptr<BasicHandler> req) {
+            m_dispatcher->add_endpoint(uri, HttpMethod::Patch, req);
+        }
+
+        void add_put(std::string uri, std::shared_ptr<BasicHandler> req) {
+            m_dispatcher->add_endpoint(uri, HttpMethod::Put, req);
+        }
+
+        void add_delete(std::string uri, std::shared_ptr<BasicHandler> req) {
+            m_dispatcher->add_endpoint(uri, HttpMethod::Delete, req);
+        }
 
         BasicDispatcher &get_dispatcher() {
             return *m_dispatcher;
@@ -59,12 +67,8 @@ namespace fcgipp {
             return *m_acceptor;
         }
 
-        void start_accepting() {
-            std::thread accepting_thread([this] {
-                m_acceptor->start_accepting();
-            });
-
-            accepting_thread.detach();
+        void start() {
+            m_acceptor->start();
         }
     };
 };

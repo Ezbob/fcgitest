@@ -5,7 +5,7 @@ namespace fcgipp {
 
     struct BasicAcceptor {
         virtual ~BasicAcceptor() = default;
-        virtual void start_accepting() = 0;
+        virtual void start() = 0;
     };
 
 }; // namespace fcgipp
