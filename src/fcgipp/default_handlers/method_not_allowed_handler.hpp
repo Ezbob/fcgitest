@@ -1,13 +1,13 @@
 
 #pragma once
 
-#include "fcgipp/basic_handler.hpp"
-#include "fcgipp/basic_server_request_response.hpp"
 #include <memory>
+#include "fcgipp/basic_server_request_response.hpp"
+#include "fcgipp/basic_handler.hpp"
 
 namespace fcgipp {
 
-    struct DefaultHttpInternalServerErrorHandler : public BasicHandler {
+    struct MethodNotAllowedHandler : public BasicHandler {
         void handle(std::shared_ptr<fcgipp::BasicServerRequestResponse>) override;
     };
 

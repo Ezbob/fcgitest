@@ -1,9 +1,9 @@
 
-#include "fcgipp/http/default_http_internal_server_error_handler.hpp"
+#include "fcgipp/default_handlers/internal_server_error_handler.hpp"
 
 using namespace fcgipp;
 
-void DefaultHttpInternalServerErrorHandler::handle(std::shared_ptr<fcgipp::BasicServerRequestResponse> req) {
+void InternalServerErrorHandler::handle(std::shared_ptr<fcgipp::BasicServerRequestResponse> req) {
     req->respond_with(
             "HTTP/1.1 500 Internal Server Error\r\n"
             "Status: 500 Internal Server Error\r\n"

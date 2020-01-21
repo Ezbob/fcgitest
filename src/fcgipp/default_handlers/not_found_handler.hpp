@@ -7,7 +7,7 @@
 
 namespace fcgipp {
 
-    struct DefaultHttpNotFoundHandler : public BasicHandler {
+    struct NotFoundHandler : public BasicHandler {
         void handle(std::shared_ptr<fcgipp::BasicServerRequestResponse>) override;
     };
 

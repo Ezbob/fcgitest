@@ -35,13 +35,14 @@ SET(SOURCES
     ${SOURCES_PREFIX}/fcgipp/default_authenticator.cpp
     ${SOURCES_PREFIX}/fcgipp/fcgi_acceptor.cpp
     ${SOURCES_PREFIX}/fcgipp/fcgi_server_request_response.cpp
+    ${SOURCES_PREFIX}/fcgipp/fcgi_application.cpp
 
-    ${SOURCES_PREFIX}/fcgipp/http/method.cpp
-    ${SOURCES_PREFIX}/fcgipp/http/response.cpp
-    ${SOURCES_PREFIX}/fcgipp/http/default_http_internal_server_error_handler.cpp
-    ${SOURCES_PREFIX}/fcgipp/http/default_http_method_not_allowed_handler.cpp
-    ${SOURCES_PREFIX}/fcgipp/http/default_http_not_found_handler.cpp
-    ${SOURCES_PREFIX}/fcgipp/http/default_http_unauthorized_handler.cpp
+    ${SOURCES_PREFIX}/fcgipp/http_method.cpp
+    ${SOURCES_PREFIX}/fcgipp/http_response.cpp
+    ${SOURCES_PREFIX}/fcgipp/default_handlers/internal_server_error_handler.cpp
+    ${SOURCES_PREFIX}/fcgipp/default_handlers/method_not_allowed_handler.cpp
+    ${SOURCES_PREFIX}/fcgipp/default_handlers/not_found_handler.cpp
+    ${SOURCES_PREFIX}/fcgipp/default_handlers/unauthorized_handler.cpp
 )
 
 SET(SHIM_SOURCES

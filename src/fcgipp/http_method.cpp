@@ -1,5 +1,5 @@
 
-#include "fcgipp/http/method.hpp"
+#include "fcgipp/http_method.hpp"
 
 using namespace fcgipp;
 

@@ -4,7 +4,7 @@
 
 #include <memory>
 #include <string>
-#include "fcgipp/http/method.hpp"
+#include "fcgipp/http_method.hpp"
 #include "basic_handler.hpp"
 #include "basic_server_request_response.hpp"
 

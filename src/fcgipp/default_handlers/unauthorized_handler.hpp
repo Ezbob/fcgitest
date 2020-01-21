@@ -7,7 +7,7 @@
 
 namespace fcgipp {
 
-    struct DefaultHttpUnauthorizedHandler : public BasicHandler {
+    struct UnauthorizedHandler : public BasicHandler {
         void handle(std::shared_ptr<fcgipp::BasicServerRequestResponse> req) override;
     };
 

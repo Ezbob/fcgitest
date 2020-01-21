@@ -1,9 +1,9 @@
 
-#include "fcgipp/http/default_http_not_found_handler.hpp"
+#include "fcgipp/default_handlers/not_found_handler.hpp"
 
 using namespace fcgipp;
 
-void DefaultHttpNotFoundHandler::handle(std::shared_ptr<fcgipp::BasicServerRequestResponse> req) {
+void NotFoundHandler::handle(std::shared_ptr<fcgipp::BasicServerRequestResponse> req) {
     req->respond_with(
             "HTTP/1.1 404 Not Found\r\n"
             "Status: 404 Not Found\r\n"

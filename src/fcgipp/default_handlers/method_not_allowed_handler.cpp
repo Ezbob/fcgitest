@@ -1,9 +1,9 @@
 
-#include "fcgipp/http/default_http_method_not_allowed_handler.hpp"
+#include "fcgipp/default_handlers/method_not_allowed_handler.hpp"
 
 using namespace fcgipp;
 
-void DefaultHttpMethodNotAllowedHandler::handle(std::shared_ptr<fcgipp::BasicServerRequestResponse> req) {
+void MethodNotAllowedHandler::handle(std::shared_ptr<fcgipp::BasicServerRequestResponse> req) {
     req->respond_with(
             "HTTP/1.1 405 Method Not Allowed\r\n"
             "Status: 405 Method Not Allowed\r\n"

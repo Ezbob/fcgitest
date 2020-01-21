@@ -1,11 +1,11 @@
 
 #pragma once
 
-#include "fcgipp/http/method.hpp"
-#include "fcgipp/http/default_http_internal_server_error_handler.hpp"
-#include "fcgipp/http/default_http_method_not_allowed_handler.hpp"
-#include "fcgipp/http/default_http_not_found_handler.hpp"
-#include "fcgipp/http/default_http_unauthorized_handler.hpp"
+#include "fcgipp/http_method.hpp"
+#include "fcgipp/default_handlers/internal_server_error_handler.hpp"
+#include "fcgipp/default_handlers/method_not_allowed_handler.hpp"
+#include "fcgipp/default_handlers/not_found_handler.hpp"
+#include "fcgipp/default_handlers/unauthorized_handler.hpp"
 
 #include "fcgipp/basic_dispatcher.hpp"
 #include "fcgipp/basic_server_request_response.hpp"
@@ -38,10 +38,10 @@ namespace fcgipp {
         using HandlerMap_t = std::unordered_map<HttpMethod, std::shared_ptr<BasicHandler>>;
         std::unordered_map<std::string, HandlerMap_t> m_dispatch_matrix;
 
-        std::shared_ptr<BasicHandler> m_handler_500 = std::make_shared<DefaultHttpInternalServerErrorHandler>();
-        std::shared_ptr<BasicHandler> m_handler_404 = std::make_shared<DefaultHttpNotFoundHandler>();
-        std::shared_ptr<BasicHandler> m_handler_401 = std::make_shared<DefaultHttpUnauthorizedHandler>();
-        std::shared_ptr<BasicHandler> m_handler_405 = std::make_shared<DefaultHttpMethodNotAllowedHandler>();
+        std::shared_ptr<BasicHandler> m_handler_500 = std::make_shared<InternalServerErrorHandler>();
+        std::shared_ptr<BasicHandler> m_handler_404 = std::make_shared<NotFoundHandler>();
+        std::shared_ptr<BasicHandler> m_handler_401 = std::make_shared<UnauthorizedHandler>();
+        std::shared_ptr<BasicHandler> m_handler_405 = std::make_shared<MethodNotAllowedHandler>();
 
         BasicAuthenticator &m_authenticator;
     };

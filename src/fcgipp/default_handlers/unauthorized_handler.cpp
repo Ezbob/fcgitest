@@ -1,9 +1,9 @@
 
-#include "fcgipp/http/default_http_unauthorized_handler.hpp"
+#include "fcgipp/default_handlers/unauthorized_handler.hpp"
 
 using namespace fcgipp;
 
-void DefaultHttpUnauthorizedHandler::handle(std::shared_ptr<fcgipp::BasicServerRequestResponse> req) {
+void UnauthorizedHandler::handle(std::shared_ptr<fcgipp::BasicServerRequestResponse> req) {
     req->respond_with(
             "HTTP/1.1 401 Unauthorized\r\n"
             "Status: 401 Unauthorized\r\n"
