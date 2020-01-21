@@ -103,7 +103,7 @@ int main(void) {
     app.add_get("/", std::make_shared<MyHandler>());
     app.add_get("/time", std::make_shared<MyJsonHandler>());
 
-    app.start(); // start does not block
+    app.start_nonblock();
 
     io.run();
 

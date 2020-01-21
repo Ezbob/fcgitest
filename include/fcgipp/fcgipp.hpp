@@ -6,10 +6,10 @@
 #include "fcgipp/basic_formatted_response.hpp"
 #include "fcgipp/basic_server_request_response.hpp"
 
-#include "fcgipp/http/internal_server_error_handler.hpp"
-#include "fcgipp/http/method_not_allowed_handler.hpp"
-#include "fcgipp/http/not_found_handler.hpp"
-#include "fcgipp/http/unauthorized_handler.hpp"
+#include "fcgipp/default_handlers/internal_server_error_handler.hpp"
+#include "fcgipp/default_handlers/method_not_allowed_handler.hpp"
+#include "fcgipp/default_handlers/not_found_handler.hpp"
+#include "fcgipp/default_handlers/unauthorized_handler.hpp"
 #include "fcgipp/http_method.hpp"
 #include "fcgipp/http_response.hpp"
 
