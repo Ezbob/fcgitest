@@ -1,4 +1,4 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 3.0)
+CMAKE_MINIMUM_REQUIRED(VERSION 3.1.3)
 
 # Name and description are injected from makefile
 PROJECT(${PROJECT_NAME}
@@ -12,11 +12,8 @@ SET(CMAKE_MODULE_PATH  ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake)
 SET(SOURCES_PREFIX ${CMAKE_CURRENT_SOURCE_DIR}/src)
 SET(LIB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/lib)
 
-# Adds the cmake c++ standard tests in cxx_standards.cmake file
-INCLUDE(cxx_standards)
-
 # tests for compiler compliance and sets the C++ standard to C++11
-USE_CXX11_STANDARD()
+SET(CMAKE_CXX_STANDARD 11)
 
 # A set of compilation flags that is always on when compiling C++
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Dc_plusplus -DASIO_STANDALONE")
