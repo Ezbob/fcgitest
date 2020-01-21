@@ -20,25 +20,15 @@ namespace fcgisrv {
         std::string translate_code();
 
     public:
-        void put_header(std::string const& raw) {
-            m_header << (raw + HTTP_LINE_END);
-        }
+        void put_header(std::string const& raw);
 
-        void put_header(std::string const& name, std::string const& value) {
-            m_header << (name + ": " + value + HTTP_LINE_END);
-        }
+        void put_header(std::string const& name, std::string const& value);
 
-        void status(int code) {
-            m_error_code = code;
-        }
+        void status(int code);
 
-        int status() {
-            return m_error_code;
-        }
+        int status();
 
-        std::ostream &body() {
-            return m_body;
-        }
+        std::ostream &body();
 
         std::string render() override;
     };

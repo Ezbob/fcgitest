@@ -88,3 +88,23 @@ std::string JsonResponse::render() {
     put_header("Content-Type", "application/json");
     return HttpResponse::render();
 }
+
+void HttpResponse::put_header(std::string const& raw) {
+    m_header << (raw + HTTP_LINE_END);
+}
+
+void HttpResponse::put_header(std::string const& name, std::string const& value) {
+    m_header << (name + ": " + value + HTTP_LINE_END);
+}
+
+void HttpResponse::status(int code) {
+    m_error_code = code;
+}
+
+int HttpResponse::status() {
+    return m_error_code;
+}
+
+std::ostream &HttpResponse::body() {
+    return m_body;
+}
