@@ -8,8 +8,6 @@ BUILD_TYPE?=Debug
 
 BUILD_DIR=${BUILD_PREFIX}/${BUILD_TYPE}
 
-all: debug
-
 help:
 	@echo "${PROJECT_NAME}:"
 	@echo "${PROJECT_DESCRIPTION}"

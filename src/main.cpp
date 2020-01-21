@@ -7,8 +7,8 @@ extern char ** environ;
 #endif
 
 #include "asio.hpp"
-#include "fcgipp/fcgipp.hpp"
-#include "fcgipp_shims/asio_scheduler.hpp"
+#include "fcgisrv/fcgisrv.hpp"
+#include "fcgisrv_shims/asio_scheduler.hpp"
 #include "json11.hpp"
 
 #include <thread>
@@ -20,31 +20,31 @@ extern char ** environ;
 static long g_pid = getpid();
 static int g_count = 0;
 
-class MyHandler : public fcgipp::BasicHandler {
+class MyHandler : public fcgisrv::BasicHandler {
 
     void penv(const char * const * envp, std::ostream &stream)
     {
-        stream << "<pre>" << fcgipp::HTTP_LINE_END;
+        stream << "<pre>" << fcgisrv::HTTP_LINE_END;
         for ( ; *envp; ++envp)
         {
-            stream << *envp << fcgipp::HTTP_LINE_END;
+            stream << *envp << fcgisrv::HTTP_LINE_END;
         }
         stream << "</pre>";
     }
 
     void penv(const std::vector<const char *> &envp, std::ostream &stream)
     {
-        stream << "<pre>" << fcgipp::HTTP_LINE_END;
+        stream << "<pre>" << fcgisrv::HTTP_LINE_END;
         for ( auto c : envp )
         {
-            stream << c << fcgipp::HTTP_LINE_END;
+            stream << c << fcgisrv::HTTP_LINE_END;
         }
         stream << "</pre>";
     }
 
 public:
-    void handle(std::shared_ptr<fcgipp::BasicServerRequestResponse> rr) {
-        fcgipp::HttpResponse resp;
+    void handle(std::shared_ptr<fcgisrv::BasicServerRequestResponse> rr) {
+        fcgisrv::HttpResponse resp;
         std::ostream &out = resp.body();
 
         resp.put_header("Content-type", "text/html");
@@ -75,9 +75,9 @@ public:
     }
 };
 
-struct MyJsonHandler : public fcgipp::BasicHandler {
-    void handle(std::shared_ptr<fcgipp::BasicServerRequestResponse> rr) {
-        fcgipp::JsonResponse resp;
+struct MyJsonHandler : public fcgisrv::BasicHandler {
+    void handle(std::shared_ptr<fcgisrv::BasicServerRequestResponse> rr) {
+        fcgisrv::JsonResponse resp;
 
         auto t = std::time(nullptr);
         char timestr[100];
@@ -98,7 +98,7 @@ int main(void) {
     asio::io_context io;
     asio::io_context::work work_io(io);
 
-    fcgipp::FcgiApplication app(std::unique_ptr<fcgipp::BasicScheduler>(new fcgipp::AsioScheduler(io)));
+    fcgisrv::FcgiApplication app(std::unique_ptr<fcgisrv::BasicScheduler>(new fcgisrv::AsioScheduler(io)));
 
     app.add_get("/", std::make_shared<MyHandler>());
     app.add_get("/time", std::make_shared<MyJsonHandler>());

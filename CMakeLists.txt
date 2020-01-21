@@ -28,22 +28,22 @@ SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static-libgcc -static-lib
 
 # Sources sets
 SET(SOURCES
-    ${SOURCES_PREFIX}/fcgipp/default_dispatcher.cpp
-    ${SOURCES_PREFIX}/fcgipp/default_authenticator.cpp
-    ${SOURCES_PREFIX}/fcgipp/fcgi_acceptor.cpp
-    ${SOURCES_PREFIX}/fcgipp/fcgi_server_request_response.cpp
-    ${SOURCES_PREFIX}/fcgipp/fcgi_application.cpp
+    ${SOURCES_PREFIX}/fcgisrv/default_dispatcher.cpp
+    ${SOURCES_PREFIX}/fcgisrv/default_authenticator.cpp
+    ${SOURCES_PREFIX}/fcgisrv/fcgi_acceptor.cpp
+    ${SOURCES_PREFIX}/fcgisrv/fcgi_server_request_response.cpp
+    ${SOURCES_PREFIX}/fcgisrv/fcgi_application.cpp
 
-    ${SOURCES_PREFIX}/fcgipp/http_method.cpp
-    ${SOURCES_PREFIX}/fcgipp/http_response.cpp
-    ${SOURCES_PREFIX}/fcgipp/default_handlers/internal_server_error_handler.cpp
-    ${SOURCES_PREFIX}/fcgipp/default_handlers/method_not_allowed_handler.cpp
-    ${SOURCES_PREFIX}/fcgipp/default_handlers/not_found_handler.cpp
-    ${SOURCES_PREFIX}/fcgipp/default_handlers/unauthorized_handler.cpp
+    ${SOURCES_PREFIX}/fcgisrv/http_method.cpp
+    ${SOURCES_PREFIX}/fcgisrv/http_response.cpp
+    ${SOURCES_PREFIX}/fcgisrv/default_handlers/internal_server_error_handler.cpp
+    ${SOURCES_PREFIX}/fcgisrv/default_handlers/method_not_allowed_handler.cpp
+    ${SOURCES_PREFIX}/fcgisrv/default_handlers/not_found_handler.cpp
+    ${SOURCES_PREFIX}/fcgisrv/default_handlers/unauthorized_handler.cpp
 )
 
 SET(SHIM_SOURCES
-    ${SOURCES_PREFIX}/fcgipp_shims/asio_scheduler.cpp
+    ${SOURCES_PREFIX}/fcgisrv_shims/asio_scheduler.cpp
 )
 
 SET(INCLUDES
@@ -57,7 +57,7 @@ SET(MAIN_SOURCE
 )
 
 SET(MAINLESS_LIB
-    fcgipp-lib
+    fcgisrv-lib
 )
 
 # libraries and their cmake files
