@@ -4,3 +4,6 @@
 [submodule "lib/json11"]
 	path = lib/json11
 	url = https://github.com/dropbox/json11
+[submodule "lib/fcgisrv"]
+	path = lib/fcgisrv
+	url = https://github.com/Ezbob/fcgisrv.git
