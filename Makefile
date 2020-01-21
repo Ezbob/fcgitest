@@ -9,10 +9,10 @@ BUILD_TYPE?=Debug
 BUILD_DIR=${BUILD_PREFIX}/${BUILD_TYPE}
 
 help:
-	@echo "${PROJECT_NAME}:"
-	@echo "${PROJECT_DESCRIPTION}"
-	@echo "------------------"
+	@echo "${PROJECT_NAME}"
+	@echo ""
 	@echo "Available targets:"
+	@echo "------------------"
 	@echo "  debug:            Builds the project in debug mode"
 	@echo "  release:          Builds the project for release"
 	@echo "  clean:            Wipes the build directories"
