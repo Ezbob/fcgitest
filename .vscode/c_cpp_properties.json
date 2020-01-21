@@ -13,7 +13,7 @@
             "intelliSenseMode": "msvc-x64",
             "includePath": [
                 "${workspaceFolder}/lib/fcgi-2.4.0/**",
-                "${workspaceFolder}/include/**",
+                "${workspaceFolder}/lib/fcgisrv/include",
                 "${workspaceFolder}/src/**",
                 "${workspaceFolder}/lib/asio/asio/include",
                 "${workspaceFolder}/lib/json11/**"
