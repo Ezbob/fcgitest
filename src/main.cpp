@@ -71,6 +71,8 @@ public:
         out << "</body>"
                "</html>";
 
+        rr->log_out() << "Not an error\n";
+
         rr->respond_with(resp);
     }
 };
