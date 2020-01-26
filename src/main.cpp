@@ -20,7 +20,7 @@ extern char ** environ;
 static long g_pid = getpid();
 static int g_count = 0;
 
-class MyHandler : public fcgisrv::BasicHandler {
+class MyHandler : public fcgisrv::IHandler {
 
     void penv(const char * const * envp, std::ostream &stream)
     {
@@ -43,7 +43,7 @@ class MyHandler : public fcgisrv::BasicHandler {
     }
 
 public:
-    void handle(std::shared_ptr<fcgisrv::BasicServerRequestResponse> rr) {
+    void handle(std::shared_ptr<fcgisrv::IServerRequestResponse> rr) {
         fcgisrv::HttpResponse resp;
         std::ostream &out = resp.body();
 
@@ -75,8 +75,8 @@ public:
     }
 };
 
-struct MyJsonHandler : public fcgisrv::BasicHandler {
-    void handle(std::shared_ptr<fcgisrv::BasicServerRequestResponse> rr) {
+struct MyJsonHandler : public fcgisrv::IHandler {
+    void handle(std::shared_ptr<fcgisrv::IServerRequestResponse> rr) {
         fcgisrv::JsonResponse resp;
 
         auto t = std::time(nullptr);
@@ -98,7 +98,7 @@ int main(void) {
     asio::io_context io;
     asio::io_context::work work_io(io);
 
-    fcgisrv::FcgiApplication app(std::unique_ptr<fcgisrv::BasicScheduler>(new fcgisrv::AsioScheduler(io)));
+    fcgisrv::FcgiApplication app(std::unique_ptr<fcgisrv::IScheduler>(new fcgisrv::AsioScheduler(io)));
 
     app.add_get("/", std::make_shared<MyHandler>());
     app.add_get("/time", std::make_shared<MyJsonHandler>());

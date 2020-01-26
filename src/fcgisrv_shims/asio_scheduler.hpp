@@ -1,12 +1,12 @@
 
 #pragma once
 
-#include "fcgisrv/basic_scheduler.hpp"
+#include "fcgisrv/fcgisrv.hpp"
 #include "asio.hpp"
 
 namespace fcgisrv {
 
-    class AsioScheduler : public BasicScheduler {
+    class AsioScheduler : public IScheduler {
         asio::io_context &m_io_ctx;
 
     public:
