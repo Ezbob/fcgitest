@@ -100,7 +100,7 @@ int main(void) {
     asio::io_context io;
     asio::io_context::work work_io(io);
 
-    fcgisrv::FcgiApplication app(std::unique_ptr<fcgisrv::IScheduler>(new fcgisrv::AsioScheduler(io)));
+    fcgisrv::FcgiApplication app(std::make_shared<fcgisrv::AsioScheduler>(io));
 
     app.add_get("/", std::make_shared<MyHandler>());
     app.add_get("/time", std::make_shared<MyJsonHandler>());
