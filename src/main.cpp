@@ -1,98 +1,10 @@
-#include <stdlib.h>
-#ifdef _WIN32
-#include <process.h>
-#else
-#include <unistd.h>
-extern char **environ;
-#endif
 
 #include "asio.hpp"
 #include "fcgisrv/fcgisrv.hpp"
 #include "fcgisrv_shims/asio_scheduler.hpp"
-#include "json11.hpp"
 
-#include <thread>
-#include <sstream>
-#include <chrono>
-#include <ctime>
-#include <type_traits>
-
-static long g_pid = getpid();
-static int g_count = 0;
-
-class My_Handler: public fcgisrv::IHandler {
-
-    void penv(const char *const *envp, std::ostream &stream) {
-        stream << "<pre>" << fcgisrv::HTTP_LINE_END;
-        for (; *envp; ++envp) {
-            stream << *envp << fcgisrv::HTTP_LINE_END;
-        }
-        stream << "</pre>";
-    }
-
-    void penv(const std::vector<const char *> &envp, std::ostream &stream) {
-        stream << "<pre>" << fcgisrv::HTTP_LINE_END;
-        for (auto c : envp) {
-            stream << c << fcgisrv::HTTP_LINE_END;
-        }
-        stream << "</pre>";
-    }
-
-  public:
-    void handle(std::shared_ptr<fcgisrv::IServer_Request_Response> rr) {
-        fcgisrv::Http_Response resp;
-        std::ostream &out = resp.body();
-
-        resp.put_header("Content-type", "text/html");
-
-        out << "<html>";
-        out << "<head>"
-               "<title>echo-cpp</title>"
-               "<meta charset=\"UTF-8\">"
-               "</head>";
-
-        out << "<body>"
-               "<h1>echo-cpp</h1>"
-               "<h4>PID: "
-            << g_pid
-            << "</h4>"
-               "<h4>Request Number: "
-            << ++g_count
-            << "</h4>"
-               "<h4>Process/Initial Environment</h4>";
-
-        penv(environ, out);
-
-        out << "<h4>Fcgi Environment</h4>";
-
-        auto parameters = rr->get_parameters();
-        penv(parameters, out);
-
-        out << "</body>"
-               "</html>";
-
-        rr->log_out() << "Not an error\n";
-
-        rr->respond_with(resp);
-    }
-};
-
-struct My_Json_Handler: public fcgisrv::IHandler {
-    void handle(std::shared_ptr<fcgisrv::IServer_Request_Response> rr) {
-        fcgisrv::Json_Response resp;
-
-        auto t = std::time(nullptr);
-        char timestr[100];
-        std::strftime(timestr, sizeof(timestr), "%c %Z", std::localtime(&t));
-
-        json11::Json j =
-            json11::Json::object{{"localtime", std::string(timestr)}};
-
-        resp.body() << j.dump();
-
-        rr->respond_with(resp);
-    }
-};
+#include "handlers/echo_handler.hpp"
+#include "handlers/current_time_handler.hpp"
 
 int main(void) {
     asio::io_context io;
@@ -101,8 +13,8 @@ int main(void) {
     fcgisrv::Fcgi_Application app(
         std::make_shared<fcgisrv::Asio_Scheduler>(io));
 
-    app.add_get("/", std::make_shared<My_Handler>());
-    app.add_get("/time", std::make_shared<My_Json_Handler>());
+    app.add_get("/", std::make_shared<fcgitest::Echo_Handler>());
+    app.add_get("/time", std::make_shared<fcgitest::Current_Time_Handler>());
 
     app.start_nonblock();
 
