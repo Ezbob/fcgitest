@@ -28,7 +28,8 @@ void Echo_Handler::penv(const std::vector<const char *> &envp,
     stream << "</pre>";
 }
 
-void Echo_Handler::handle(std::shared_ptr<fcgisrv::IServer_Request_Response> rr) {
+void Echo_Handler::handle(
+    std::shared_ptr<fcgisrv::IServer_Request_Response> rr) {
 
     fcgisrv::Http_Response resp;
     std::ostream &out = resp.body();
